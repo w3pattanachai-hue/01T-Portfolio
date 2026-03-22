@@ -1,1238 +1,406 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="01T">
 <title>01T Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:#07090e;}
-body{color:#e8f0f8;font-family:'Inter',sans-serif;-webkit-text-size-adjust:100%;}
-input:focus{outline:none!important;box-shadow:none!important;}
-input[type=number]::-webkit-inner-spin-button{opacity:0;}
-::-webkit-scrollbar{width:3px;height:3px;}
-::-webkit-scrollbar-track{background:#07090e;}
-::-webkit-scrollbar-thumb{background:#243648;border-radius:2px;}
-.tab-btn{transition:all .15s;-webkit-tap-highlight-color:transparent;}
-.tab-btn:hover{color:#e8f0f8!important;background:#111820!important;}
-.stock-card{-webkit-tap-highlight-color:transparent;}
-.stock-card:active{opacity:.8;}
-#root{min-height:100vh;min-height:-webkit-fill-available;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#07090e;color:#e8f0f8;font-family:'Inter',sans-serif;font-size:14px}
+body{-webkit-text-size-adjust:100%}
+input{background:transparent;border:none;color:#e8f0f8;outline:none;font-family:'DM Mono',monospace;width:100%}
+textarea{font-family:'DM Mono',monospace;font-size:11px;resize:vertical;outline:none}
+button{cursor:pointer;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+#header{position:sticky;top:0;z-index:50;background:rgba(7,9,14,.94);backdrop-filter:blur(20px);
+  border-bottom:1px solid #1c2a3a;padding:0 20px;height:54px;
+  display:flex;align-items:center;justify-content:space-between}
+#tabs{display:flex;padding:0 20px;border-bottom:1px solid #1c2a3a;overflow-x:auto;gap:2px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+.tb{padding:10px 14px;border:none;background:transparent;font-size:12px;font-weight:400;
+  white-space:nowrap;color:#4e6478;border-bottom:2px solid transparent;transition:all .15s}
+.tb.on{color:#38bdf8;font-weight:600;border-bottom-color:#38bdf8}
+#content{padding:16px 20px;max-width:960px;margin:0 auto;padding-bottom:30px}
+.tp{display:none}.tp.on{display:block}
+.card{background:#0d1117;border:1px solid #1c2a3a;border-radius:14px;padding:16px 18px;margin-bottom:10px}
+.sl{font-size:9px;font-weight:600;color:#4e6478;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1c2a3a;display:block}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.bw{position:relative;height:4px;background:#1c2a3a;border-radius:3px;margin-top:5px}
+.bf{position:absolute;left:0;top:0;height:100%;border-radius:3px;transition:width .5s}
+.bt{position:absolute;top:-4px;width:2px;height:12px;background:rgba(255,255,255,.3);border-radius:1px}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:6px;margin-top:6px}
+.sc{border-radius:10px;padding:10px 12px;border:1px solid #1c2a3a;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:border-color .2s}
+.sc:active{opacity:.8}
+.pr{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;border-bottom:1px solid #1c2a3a}
+.pr:last-child{border-bottom:none}
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(6px)}
+#ov.on{display:flex}
+#oi{background:#0d1117;border:1px solid #243648;border-radius:16px;padding:24px 28px;
+  width:280px;box-shadow:0 24px 64px rgba(0,0,0,.7)}
+#os{font-size:34px;font-weight:500;color:#38bdf8;font-family:'DM Mono',monospace;
+  background:transparent;border:none;border-bottom:2px solid rgba(56,189,248,.3);
+  padding-bottom:8px;margin-bottom:22px;display:block;width:100%;outline:none}
+.lg{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+.li{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:#111820;border:1px solid #1c2a3a}
+.ld{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:#07090e}
+::-webkit-scrollbar-thumb{background:#243648;border-radius:2px}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;color:#38bdf8;letter-spacing:3px">01T</div>
+    <div style="font-size:9px;color:#4e6478;letter-spacing:2px;font-family:'DM Mono',monospace">PORTFOLIO · 135%</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <div id="hb" style="display:none;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600"></div>
+    <div id="ht" style="font-size:10px;color:#4e6478;font-family:'DM Mono',monospace;display:none"></div>
+    <button id="bs" onclick="saveNow()"
+      style="background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);color:#38bdf8;
+      border-radius:8px;padding:5px 12px;min-width:64px;font-size:11px;font-weight:600;transition:all .3s">💾 Save</button>
+  </div>
+</div>
+<div id="tabs">
+  <button class="tb on" data-tab="dash">Dashboard</button>
+  <button class="tb" data-tab="port">Portfolio</button>
+  <button class="tb" data-tab="prices">Prices</button>
+  <button class="tb" data-tab="act">Action</button>
+  <button class="tb" data-tab="nw">Net Worth</button>
+  <button class="tb" data-tab="tgt">Target</button>
+  <button class="tb" data-tab="macro">Macro</button>
+</div>
+<div id="content">
+  <div id="t-dash" class="tp on"></div>
+  <div id="t-port" class="tp"></div>
+  <div id="t-prices" class="tp"></div>
+  <div id="t-act" class="tp"></div>
+  <div id="t-nw" class="tp"></div>
+  <div id="t-tgt" class="tp"></div>
+  <div id="t-macro" class="tp"></div>
+</div>
+<div id="ov" onclick="closeModal()">
+  <div id="oi" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+      <div>
+        <div id="mt" style="font-size:20px;font-weight:600;font-family:'DM Mono',monospace"></div>
+        <div id="mb" style="font-size:10px;color:#4e6478;margin-top:2px"></div>
+        <div id="mc" style="font-size:11px;color:#4e6478;margin-top:5px"></div>
+      </div>
+      <button onclick="closeModal()" style="background:transparent;border:none;color:#4e6478;font-size:18px;padding:0 4px">✕</button>
+    </div>
+    <div style="font-size:9px;color:#4e6478;margin-bottom:8px;letter-spacing:1.5px">SHARES</div>
+    <input id="os" type="text" inputmode="decimal" placeholder="0" oninput="updMC()" onkeydown="mkd(event)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button onclick="closeModal()" style="background:#111820;border:1px solid #1c2a3a;color:#4e6478;border-radius:8px;padding:9px;font-size:12px">Cancel</button>
+      <button onclick="saveModal()" style="background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);color:#38bdf8;border-radius:8px;padding:9px;font-size:12px;font-weight:600">Save</button>
+    </div>
+  </div>
+</div>
 
 <script>
-// Show loading indicator immediately
-document.getElementById('root').innerHTML = 
-  '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;">' +
-  '<div style="font-family:sans-serif;font-size:22px;font-weight:800;color:#38bdf8;letter-spacing:3px;">01T</div>' +
-  '<div style="font-size:12px;color:#4e6478;">กำลังโหลด...</div>' +
-  '</div>';
-</script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+// DATA
+const TGT={BULL:{CoreTech:32,NonTech:18,Quality:20,Energy:16,Moon:18,Hedge:20,Cash:11},NEUTRAL:{CoreTech:28,NonTech:22,Quality:20,Energy:18,Moon:12,Hedge:24,Cash:11},CAUTION:{CoreTech:24,NonTech:22,Quality:18,Energy:20,Moon:8,Hedge:30,Cash:13},CRISIS:{CoreTech:18,NonTech:24,Quality:17,Energy:15,Moon:3,Hedge:38,Cash:22}};
+const BH={CoreTech:{BULL:{NVDA:9,GOOGL:9,ASML:7,CRWD:4,MRVL:3},NEUTRAL:{NVDA:8,GOOGL:6,ASML:6,CRWD:4,MRVL:4},CAUTION:{NVDA:7,GOOGL:5,ASML:5,CRWD:4,MRVL:3},CRISIS:{NVDA:6,GOOGL:5,ASML:4,CRWD:2,MRVL:1}},NonTech:{BULL:{LLY:5,VRTX:3,SPGI:3,UNH:3,NTR:2,COST:2},NEUTRAL:{LLY:6,VRTX:4,SPGI:4,UNH:3,NTR:3,COST:2},CAUTION:{LLY:7,VRTX:4,SPGI:4,UNH:4,NTR:3,COST:2},CRISIS:{LLY:8,VRTX:5,SPGI:4,UNH:4,NTR:2,COST:1}},Quality:{BULL:{MSFT:6,AVGO:6,ETN:4,XOM:4,QCOM:2},NEUTRAL:{MSFT:5,AVGO:5,ETN:4,XOM:4,QCOM:2},CAUTION:{MSFT:5,AVGO:5,ETN:4,XOM:4},CRISIS:{MSFT:5,AVGO:4,ETN:4,XOM:4}},Energy:{BULL:{CCJ:3,CEG:3,PWR:4,VRT:3,ANET:3},NEUTRAL:{CCJ:4,CEG:4,PWR:4,VRT:3,ANET:3},CAUTION:{CCJ:4,CEG:5,PWR:4,VRT:4,ANET:3},CRISIS:{CCJ:4,CEG:4,PWR:4,VRT:2,ANET:1}},Moon:{BULL:{PLTR:4,CRDO:4,RKLB:3,IONQ:3,CORZ:4},NEUTRAL:{PLTR:3,CRDO:3,RKLB:2,IONQ:2,CORZ:2},CAUTION:{PLTR:2,CRDO:2,RKLB:1,IONQ:1},CRISIS:{PLTR:2}},Hedge:{BULL:{GLDM:3,SIVR:2,'BRK-B':4,CB:3,JNJ:3,KO:3,VTIP:2},NEUTRAL:{GLDM:3,SIVR:2,'BRK-B':6,CB:5,JNJ:2.5,KO:2.5,VTIP:3},CAUTION:{GLDM:3,SIVR:2,'BRK-B':6,CB:5,JNJ:5,KO:5,VTIP:4},CRISIS:{GLDM:3,SIVR:2,'BRK-B':7,CB:6,JNJ:8,KO:8,VTIP:4}},Cash:{BULL:{SGOV:8,CLOI:3},NEUTRAL:{SGOV:8,CLOI:3},CAUTION:{SGOV:10,CLOI:3},CRISIS:{SGOV:19,CLOI:3}}};
+const BC={CoreTech:'#38bdf8',NonTech:'#a78bfa',Quality:'#34d399',Energy:'#fbbf24',Moon:'#f472b6',Hedge:'#94a3b8',Cash:'#6ee7b7'};
+const BE={CoreTech:'💻',NonTech:'💊',Quality:'💎',Energy:'⚡',Moon:'🌙',Hedge:'🛡️',Cash:'💵'};
+const PC={CoreTech:'#38bdf8',NonTech:'#c084fc',Quality:'#4ade80',Energy:'#fcd34d',Moon:'#f9a8d4',Hedge:'#94a3b8',Cash:'#6ee7b7'};
+const BM={NVDA:'CoreTech',GOOGL:'CoreTech',ASML:'CoreTech',CRWD:'CoreTech',MRVL:'CoreTech',LLY:'NonTech',VRTX:'NonTech',SPGI:'NonTech',UNH:'NonTech',NTR:'NonTech',COST:'NonTech',MSFT:'Quality',AVGO:'Quality',ETN:'Quality',XOM:'Quality',QCOM:'Quality',CCJ:'Energy',CEG:'Energy',PWR:'Energy',VRT:'Energy',ANET:'Energy',PLTR:'Moon',CRDO:'Moon',RKLB:'Moon',IONQ:'Moon',CORZ:'Moon',GLDM:'Hedge',SIVR:'Hedge','BRK-B':'Hedge',CB:'Hedge',JNJ:'Hedge',KO:'Hedge',VTIP:'Hedge',SGOV:'Cash',CLOI:'Cash'};
+const ALL=['NVDA','GOOGL','ASML','CRWD','MRVL','LLY','VRTX','SPGI','UNH','NTR','COST','MSFT','AVGO','ETN','XOM','QCOM','CCJ','CEG','PWR','VRT','ANET','PLTR','CRDO','RKLB','IONQ','CORZ','GLDM','SIVR','BRK-B','CB','JNJ','KO','VTIP','SGOV','CLOI'];
+const PERM={NVDA:6,GOOGL:6,LLY:4,GLDM:5,'BRK-B':3,CLOI:3};
+const AP={BULL:['Moon','CoreTech','Energy','Quality','NonTech','Hedge','Cash'],NEUTRAL:['CoreTech','NonTech','Energy','Moon','Quality','Hedge','Cash'],CAUTION:['Hedge','Cash','NonTech','Energy','CoreTech','Quality','Moon'],CRISIS:['Cash','Hedge','NonTech','Quality','Energy','CoreTech','Moon']};
+const MM={BULL:{label:'🟢 BULL',color:'#10d9a0',bg:'rgba(16,217,160,.08)',border:'rgba(16,217,160,.25)'},NEUTRAL:{label:'🟡 NEUTRAL',color:'#fbbf24',bg:'rgba(251,191,36,.08)',border:'rgba(251,191,36,.25)'},CAUTION:{label:'🟠 CAUTION',color:'#f97316',bg:'rgba(249,115,22,.08)',border:'rgba(249,115,22,.25)'},CRISIS:{label:'🔴 CRISIS',color:'#f87171',bg:'rgba(248,113,113,.08)',border:'rgba(248,113,113,.25)'},UNKNOWN:{label:'⚪ —',color:'#4e6478',bg:'rgba(78,100,120,.06)',border:'rgba(78,100,120,.15)'}};
 
-<script type="text/babel">
-const {useState,useEffect,useCallback,useRef} = React;
+// STATE
+const S={sh:Object.fromEntries(ALL.map(t=>[t,''])),pr:Object.fromEntries(ALL.map(t=>[t,''])),mac:{vix:'',oil:'',move:'',spx200:''},fx:{usdthb:'33.5',budget:''},sav:{iau:'',kgc:'',usdDep:''},lr:''};
+let ctab='dash',mTicker=null,rts=false,stmr=null;
 
-// ─── localStorage wrapper (persistent across sessions) ───────────────────────
-const LS = {
-  get(key, fallback){
-    try{
-      const v = localStorage.getItem(key);
-      if(v===null||v===undefined) return fallback;
-      return JSON.parse(v) ?? fallback;
-    } catch{ return fallback; }
-  },
-  set(key, value){
-    try{ localStorage.setItem(key, JSON.stringify(value)); return true; }
-    catch(e){ console.warn('LS.set error:',e); return false; }
-  }
-};
-const SK='01t-sh-v1', PK='01t-pr-v1', MK='01t-mc-v1', FK='01t-fx-v1', SVK='01t-sv-v1', LK='01t-lr-v1';
+// STORAGE
+const K={sh:'01t-s1',pr:'01t-p1',mac:'01t-m1',fx:'01t-f1',sav:'01t-v1',lr:'01t-r1'};
+const lg=(k,fb)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch{return fb;}};
+const ls=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true;}catch{return false;}};
 
-// ─── PORTFOLIO DATA (01T v2 — 22 มี.ค. 2026) ─────────────────────────────────
-const TARGET = {
-  BULL:    { CoreTech:32, NonTech:18, Quality:20, Energy:16, Moon:18, Hedge:20, Cash:11 },
-  NEUTRAL: { CoreTech:28, NonTech:22, Quality:20, Energy:18, Moon:12, Hedge:24, Cash:11 },
-  CAUTION: { CoreTech:24, NonTech:22, Quality:18, Energy:20, Moon:8,  Hedge:30, Cash:13 },
-  CRISIS:  { CoreTech:18, NonTech:24, Quality:17, Energy:15, Moon:3,  Hedge:38, Cash:22 },
-};
-
-const BH = {
-  CoreTech:{
-    BULL:    { NVDA:9, GOOGL:9, ASML:7, CRWD:4, MRVL:3 },
-    NEUTRAL: { NVDA:8, GOOGL:6, ASML:6, CRWD:4, MRVL:4 },
-    CAUTION: { NVDA:7, GOOGL:5, ASML:5, CRWD:4, MRVL:3 },
-    CRISIS:  { NVDA:6, GOOGL:5, ASML:4, CRWD:2, MRVL:1 },
-  },
-  NonTech:{
-    BULL:    { LLY:5, VRTX:3, SPGI:3, UNH:3, NTR:2, COST:2 },
-    NEUTRAL: { LLY:6, VRTX:4, SPGI:4, UNH:3, NTR:3, COST:2 },
-    CAUTION: { LLY:7, VRTX:4, SPGI:4, UNH:4, NTR:3, COST:2 },
-    CRISIS:  { LLY:8, VRTX:5, SPGI:4, UNH:4, NTR:2, COST:1 },
-  },
-  Quality:{
-    BULL:    { MSFT:6, AVGO:6, ETN:4, XOM:4, QCOM:2 },
-    NEUTRAL: { MSFT:5, AVGO:5, ETN:4, XOM:4, QCOM:2 },
-    CAUTION: { MSFT:5, AVGO:5, ETN:4, XOM:4 },
-    CRISIS:  { MSFT:5, AVGO:4, ETN:4, XOM:4 },
-  },
-  Energy:{
-    BULL:    { CCJ:3, CEG:3, PWR:4, VRT:3, ANET:3 },
-    NEUTRAL: { CCJ:4, CEG:4, PWR:4, VRT:3, ANET:3 },
-    CAUTION: { CCJ:4, CEG:5, PWR:4, VRT:4, ANET:3 },
-    CRISIS:  { CCJ:4, CEG:4, PWR:4, VRT:2, ANET:1 },
-  },
-  Moon:{
-    BULL:    { PLTR:4, CRDO:4, RKLB:3, IONQ:3, CORZ:4 },
-    NEUTRAL: { PLTR:3, CRDO:3, RKLB:2, IONQ:2, CORZ:2 },
-    CAUTION: { PLTR:2, CRDO:2, RKLB:1, IONQ:1 },
-    CRISIS:  { PLTR:2 },
-  },
-  Hedge:{
-    BULL:    { "GLDM+SIVR":5, "BRK-B":4, CB:3, JNJ:3, KO:3, VTIP:2 },
-    NEUTRAL: { "GLDM+SIVR":5, "BRK-B":6, CB:5, JNJ:2.5, KO:2.5, VTIP:3 },
-    CAUTION: { "GLDM+SIVR":5, "BRK-B":6, CB:5, JNJ:5, KO:5, VTIP:4 },
-    CRISIS:  { "GLDM+SIVR":5, "BRK-B":7, CB:6, JNJ:8, KO:8, VTIP:4 },
-  },
-  Cash:{
-    BULL:    { SGOV:8, CLOI:3 },
-    NEUTRAL: { SGOV:8, CLOI:3 },
-    CAUTION: { SGOV:10, CLOI:3 },
-    CRISIS:  { SGOV:19, CLOI:3 },
-  },
-};
-
-const BC = { CoreTech:"#38bdf8", NonTech:"#a78bfa", Quality:"#34d399", Energy:"#fbbf24", Moon:"#f472b6", Hedge:"#94a3b8", Cash:"#6ee7b7" };
-const BE = { CoreTech:"💻", NonTech:"💊", Quality:"💎", Energy:"⚡", Moon:"🌙", Hedge:"🛡️", Cash:"💵" };
-const BM = {
-  NVDA:"CoreTech", GOOGL:"CoreTech", ASML:"CoreTech", CRWD:"CoreTech", MRVL:"CoreTech",
-  LLY:"NonTech", VRTX:"NonTech", SPGI:"NonTech", UNH:"NonTech", NTR:"NonTech", COST:"NonTech",
-  MSFT:"Quality", AVGO:"Quality", ETN:"Quality", XOM:"Quality", QCOM:"Quality",
-  CCJ:"Energy", CEG:"Energy", PWR:"Energy", VRT:"Energy", ANET:"Energy",
-  PLTR:"Moon", CRDO:"Moon", RKLB:"Moon", IONQ:"Moon", CORZ:"Moon",
-  GLDM:"Hedge", SIVR:"Hedge", "BRK-B":"Hedge", CB:"Hedge", JNJ:"Hedge", KO:"Hedge", VTIP:"Hedge",
-  SGOV:"Cash", CLOI:"Cash",
-};
-const ALL = ["NVDA","GOOGL","ASML","CRWD","MRVL","LLY","VRTX","SPGI","UNH","NTR","COST","MSFT","AVGO","ETN","XOM","QCOM","CCJ","CEG","PWR","VRT","ANET","PLTR","CRDO","RKLB","IONQ","CORZ","GLDM","SIVR","BRK-B","CB","JNJ","KO","VTIP","SGOV","CLOI"];
-const PERM = { NVDA:6, GOOGL:6, LLY:4, GLDM:5, "BRK-B":3, CLOI:3 };
-const AP = {
-  BULL:    ["Moon","CoreTech","Energy","Quality","NonTech","Hedge","Cash"],
-  NEUTRAL: ["CoreTech","NonTech","Energy","Moon","Quality","Hedge","Cash"],
-  CAUTION: ["Hedge","Cash","NonTech","Energy","CoreTech","Quality","Moon"],
-  CRISIS:  ["Cash","Hedge","NonTech","Quality","Energy","CoreTech","Moon"],
-};
-
-// ─── MODE LOGIC ───────────────────────────────────────────────────────────────
-const RK={BULL:0,NEUTRAL:1,CAUTION:2,CRISIS:3};
-const sVIX=v=>v>35?"CRISIS":v>25?"CAUTION":v>20?"NEUTRAL":"BULL";
-const sOil=o=>o>115?"CRISIS":o>95?"CAUTION":o>85?"NEUTRAL":"BULL";
-const sMOVE=m=>m>130?"CRISIS":m>110?"CAUTION":m>95?"NEUTRAL":"BULL";
-const sSPX=s=>s<-10?"CRISIS":s<-3?"CAUTION":s<2?"NEUTRAL":"BULL";
-const worst=a=>a.reduce((x,y)=>RK[x]>=RK[y]?x:y,"BULL");
-function getSigs(mac){
-  const o={};
-  const v=parseFloat(mac.vix),oi=parseFloat(mac.oil),m=parseFloat(mac.move),s=parseFloat(mac.spx200);
-  if(!isNaN(v))o.VIX=sVIX(v);
-  if(!isNaN(oi))o.Oil=sOil(oi);
-  if(!isNaN(m))o.MOVE=sMOVE(m);
-  if(!isNaN(s))o.SPX=sSPX(s);
-  return o;
+function loadAll(){
+  const sh=lg(K.sh,null),pr=lg(K.pr,null),mac=lg(K.mac,null),fx=lg(K.fx,null),sav=lg(K.sav,null),lr=lg(K.lr,null);
+  if(sh)Object.assign(S.sh,sh);if(pr)Object.assign(S.pr,pr);
+  if(mac)Object.assign(S.mac,mac);if(fx)Object.assign(S.fx,fx);
+  if(sav)Object.assign(S.sav,sav);if(lr)S.lr=lr;
+  console.log('[01T] sh:',Object.values(S.sh).filter(v=>parseFloat(v)>0).length,'pr:',Object.values(S.pr).filter(v=>parseFloat(v)>0).length);
+  setTimeout(()=>{rts=true;},300);
 }
-const getMode=mac=>{const s=Object.values(getSigs(mac));return s.length===0?"UNKNOWN":worst(s);};
-
-const MM={
-  BULL:    { label:"🟢 BULL",    color:"#10d9a0", bg:"rgba(16,217,160,.08)",  border:"rgba(16,217,160,.25)",  desc:"VIX<20 · Oil<$85 · MOVE<95" },
-  NEUTRAL: { label:"🟡 NEUTRAL", color:"#fbbf24", bg:"rgba(251,191,36,.08)",  border:"rgba(251,191,36,.25)",  desc:"VIX 20-25 · Oil $85-95" },
-  CAUTION: { label:"🟠 CAUTION", color:"#f97316", bg:"rgba(249,115,22,.08)",  border:"rgba(249,115,22,.25)",  desc:"VIX 25-35 · Oil $95-115" },
-  CRISIS:  { label:"🔴 CRISIS",  color:"#f87171", bg:"rgba(248,113,113,.08)", border:"rgba(248,113,113,.25)", desc:"VIX>35 · Oil>$115" },
-  UNKNOWN: { label:"⚪ —",       color:"#4e6478", bg:"rgba(78,100,120,.06)",  border:"rgba(78,100,120,.15)",  desc:"กรอกข้อมูลเพื่อคำนวณ" },
-};
-
-// ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
-const T = {
-  bg0:"#07090e", bg1:"#0d1117", bg2:"#111820", bg3:"#16202d",
-  b1:"#1c2a3a", b2:"#243648",
-  t1:"#e8f0f8", t2:"#8aa0b4", t3:"#4e6478",
-  a:"#38bdf8",
-};
-
-const IS = {
-  background:"transparent", border:"none", color:T.t1, outline:"none",
-  fontFamily:"'DM Mono',monospace", width:"100%",
-};
-
-// ─── COMPONENTS ──────────────────────────────────────────────────────────────
-function Bar({pct,target,color}){
-  const c = pct>target+3?"#f97316" : pct<target-3?"#60a5fa" : color;
-  return(
-    <div style={{position:"relative",height:4,background:T.b1,borderRadius:3}}>
-      <div style={{position:"absolute",left:0,top:0,height:"100%",width:`${Math.min(pct/45*100,100)}%`,
-        background:c,borderRadius:3,boxShadow:`0 0 6px ${c}55`,transition:"width .5s ease"}}/>
-      <div style={{position:"absolute",top:-4,width:2,height:12,background:"rgba(255,255,255,.3)",
-        left:`${Math.min(target/45*100,100)}%`,borderRadius:1,zIndex:2}}/>
-    </div>
-  );
+function autoSave(){
+  if(!rts)return;
+  clearTimeout(stmr);
+  stmr=setTimeout(()=>{ls(K.sh,S.sh);ls(K.pr,S.pr);ls(K.mac,S.mac);ls(K.fx,S.fx);ls(K.sav,S.sav);if(S.lr)ls(K.lr,S.lr);showSaved();},600);
+}
+function saveNow(){
+  rts=true;ls(K.sh,S.sh);ls(K.pr,S.pr);ls(K.mac,S.mac);ls(K.fx,S.fx);ls(K.sav,S.sav);if(S.lr)ls(K.lr,S.lr);showSaved();
+}
+function showSaved(){
+  const b=document.getElementById('bs');
+  b.textContent='✓ Saved';b.style.color='#10d9a0';b.style.background='rgba(16,217,160,.15)';b.style.borderColor='rgba(16,217,160,.4)';
+  setTimeout(()=>{b.textContent='💾 Save';b.style.color='#38bdf8';b.style.background='rgba(56,189,248,.15)';b.style.borderColor='rgba(56,189,248,.4)';},2000);
 }
 
-function Badge({children,color,bg}){
-  return(
-    <span style={{display:"inline-block",padding:"2px 8px",borderRadius:20,fontSize:10,fontWeight:600,
-      color:color||T.t1,background:bg||T.b2}}>
-      {children}
-    </span>
-  );
+// CALC
+function getMode(){
+  const RK={BULL:0,NEUTRAL:1,CAUTION:2,CRISIS:3},worst=a=>a.reduce((x,y)=>RK[x]>=RK[y]?x:y,'BULL');
+  const sg=[];const v=parseFloat(S.mac.vix),o=parseFloat(S.mac.oil),m=parseFloat(S.mac.move),s=parseFloat(S.mac.spx200);
+  if(!isNaN(v))sg.push(v>35?'CRISIS':v>25?'CAUTION':v>20?'NEUTRAL':'BULL');
+  if(!isNaN(o))sg.push(o>115?'CRISIS':o>95?'CAUTION':o>85?'NEUTRAL':'BULL');
+  if(!isNaN(m))sg.push(m>130?'CRISIS':m>110?'CAUTION':m>95?'NEUTRAL':'BULL');
+  if(!isNaN(s))sg.push(s<-10?'CRISIS':s<-3?'CAUTION':s<2?'NEUTRAL':'BULL');
+  return sg.length?worst(sg):'UNKNOWN';
+}
+function calc(){
+  const mode=getMode(),mm=MM[mode],tgt=TGT[mode]||TGT.NEUTRAL,usdthb=parseFloat(S.fx.usdthb)||33.5;
+  const vals={};ALL.forEach(t=>{const sh=parseFloat(S.sh[t]),pr=parseFloat(S.pr[t]);vals[t]=(sh>0&&pr>0)?Math.round(sh*pr*usdthb):0;});
+  const total=Object.values(vals).reduce((a,b)=>a+b,0);
+  const bv={},bp={},sp={};
+  Object.keys(BC).forEach(b=>{bv[b]=ALL.filter(t=>BM[t]===b).reduce((s,t)=>s+(vals[t]||0),0);bp[b]=total>0?(bv[b]/total)*135:0;});
+  ALL.forEach(t=>{sp[t]=total>0?(vals[t]/total)*135:0;});
+  return{mode,mm,tgt,usdthb,vals,total,bv,bp,sp};
 }
 
-function ModeDot({mode}){
-  const c={BULL:"#10d9a0",NEUTRAL:"#fbbf24",CAUTION:"#f97316",CRISIS:"#f87171",UNKNOWN:"#4e6478"}[mode]||"#4e6478";
-  return <span style={{display:"inline-block",width:7,height:7,borderRadius:"50%",background:c,boxShadow:`0 0 5px ${c}`,flexShrink:0}}/>;
+// TABS
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>goTab(b.dataset.tab));
+function goTab(id){
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));
+  document.getElementById('t-'+id).classList.add('on');
+  ctab=id;render(id);
+}
+function renderAll(){renderHdr();render(ctab);}
+function render(id){renderHdr();if(id==='dash')rDash();else if(id==='port')rPort();else if(id==='prices')rPrices();else if(id==='act')rAct();else if(id==='nw')rNW();else if(id==='tgt')rTgt();else if(id==='macro')rMacro();}
+function renderHdr(){
+  const{mode,mm,total}=calc();
+  const hb=document.getElementById('hb');
+  hb.style.display=mode!=='UNKNOWN'?'block':'none';
+  if(mode!=='UNKNOWN'){hb.textContent=mm.label;hb.style.background=mm.bg;hb.style.color=mm.color;hb.style.border=`1px solid ${mm.border}`;}
+  const ht=document.getElementById('ht');
+  ht.style.display=total>0?'block':'none';
+  ht.textContent=(total/1000).toFixed(1)+'K THB';
 }
 
-function Card({children,style={}}){
-  return(
-    <div style={{background:T.bg1,border:`1px solid ${T.b1}`,borderRadius:14,padding:"16px 18px",...style}}>
-      {children}
-    </div>
-  );
-}
-
-function SLabel({children}){
-  return(
-    <div style={{fontSize:9,fontWeight:600,color:T.t3,letterSpacing:"2px",textTransform:"uppercase",
-      marginBottom:12,paddingBottom:8,borderBottom:`1px solid ${T.b1}`}}>
-      {children}
-    </div>
-  );
-}
-
-
-const PC={CoreTech:"#38bdf8",NonTech:"#c084fc",Quality:"#4ade80",Energy:"#fcd34d",Moon:"#f9a8d4",Hedge:"#94a3b8",Cash:"#6ee7b7"};
-
-function PieChart({bp,total}){
-  const buckets=Object.keys(BC);
-  const vals=buckets.map(b=>Math.max(bp[b]||0,0));
-  const sum=vals.reduce((a,v)=>a+v,0)||1;
-
-  // Donut geometry
-  const W=260,H=260,cx=130,cy=130,R=96,ri=58,GAP=0.028;
-  let ang=3*Math.PI/4;  // 7:30 position (225° from top, clockwise)
-  const slices=buckets.map((b,i)=>{
-    const raw=vals[i]/sum;
-    const sweep=Math.max(raw*2*Math.PI-GAP,0.001);
-    const a1=ang+GAP/2,a2=a1+sweep;
-    ang+=raw*2*Math.PI;
-    const mid=(a1+a2)/2;
-    // outer/inner arc points
-    const ox1=cx+R*Math.cos(a1),oy1=cy+R*Math.sin(a1);
-    const ox2=cx+R*Math.cos(a2),oy2=cy+R*Math.sin(a2);
-    const ix1=cx+ri*Math.cos(a2),iy1=cy+ri*Math.sin(a2);
-    const ix2=cx+ri*Math.cos(a1),iy2=cy+ri*Math.sin(a1);
-    const lg=sweep>Math.PI?1:0;
-    const d=`M${ox1},${oy1} A${R},${R} 0 ${lg},1 ${ox2},${oy2} L${ix1},${iy1} A${ri},${ri} 0 ${lg},0 ${ix2},${iy2} Z`;
-    // leader line: from ring midpoint outward
-    const r1=R+6, r2=R+16, r3=R+20;
-    const lx1=cx+r1*Math.cos(mid),ly1=cy+r1*Math.sin(mid);
-    const lx2=cx+r2*Math.cos(mid),ly2=cy+r2*Math.sin(mid);
-    // text anchor side
-    const right=Math.cos(mid)>0;
-    const lx3=cx+r3*Math.cos(mid)+(right?4:-4),ly3=cy+r3*Math.sin(mid);
-    return{b,raw,d,mid,lx1,ly1,lx2,ly2,lx3,ly3,right,pct:bp[b]||0};
+// DASHBOARD
+function rDash(){
+  const{mode,mm,tgt,total,bp,sp}=calc();const el=document.getElementById('t-dash');
+  let h=`<div style="background:${mm.bg};border:1px solid ${mm.border};border-radius:14px;padding:14px 18px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${Object.keys(MM).indexOf(mode)>=0?8:0}px">
+      <span style="font-size:16px;font-weight:700;color:${mm.color}">${mm.label}</span>
+      ${total>0?`<span style="font-family:'DM Mono',monospace;font-size:13px">${(total/1000).toFixed(1)}K THB</span>`:''}
+    </div></div>
+  <div class="card">
+  <span class="sl">Bucket Allocation${mode!=='UNKNOWN'?' · '+mode:''}${total>0?' · '+(total/1000).toFixed(1)+'K THB':''}</span>`;
+  Object.keys(BC).forEach(b=>{
+    const pct=bp[b]||0,t2=tgt[b]||0,gap=pct-t2;
+    const gc=Math.abs(gap)<=3?'#10d9a0':gap>0?'#f97316':'#60a5fa';
+    const bc=pct>t2+3?'#f97316':pct<t2-3?'#60a5fa':BC[b];
+    h+=`<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <div style="display:flex;align-items:center;gap:7px"><span style="font-size:14px">${BE[b]}</span><span style="font-size:12px;font-weight:600;color:${BC[b]}">${b}</span></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:12px;font-weight:700;font-family:'DM Mono',monospace">${total>0?pct.toFixed(1):'—'}%</span>
+          <span style="font-size:10px;color:#4e6478">/${t2}%</span>
+          ${total>0?`<span class="badge" style="color:${gc};background:${gc}18">${gap>0?'+':''}${gap.toFixed(1)}%</span>`:''}
+        </div>
+      </div>
+      <div class="bw"><div class="bf" style="width:${Math.min(pct/45*100,100)}%;background:${bc};box-shadow:0 0 6px ${bc}55"></div><div class="bt" style="left:${Math.min(t2/45*100,100)}%"></div></div>
+    </div>`;
   });
-
-  return(
-    <div style={{background:T.bg1,border:`1px solid ${T.b1}`,borderRadius:16,
-      padding:"18px 18px 16px",marginTop:12}}>
-
-      {/* header */}
-      <div style={{fontSize:9,fontWeight:600,color:T.t3,letterSpacing:"2.5px",
-        textTransform:"uppercase",marginBottom:4,paddingBottom:10,
-        borderBottom:`1px solid ${T.b1}`,display:"flex",
-        justifyContent:"space-between",alignItems:"center"}}>
-        <span>Allocation</span>
-        {total>0&&<span style={{fontFamily:"'DM Mono',monospace",color:T.t2,
-          letterSpacing:"1px",fontSize:10}}>{(total/1000).toFixed(1)}K THB</span>}
-      </div>
-
-      {/* chart — wider viewBox to give room for labels */}
-      <div style={{display:"flex",justifyContent:"center",margin:"4px 0 16px"}}>
-        <svg width="100%" viewBox={`0 0 ${W} ${H}`}
-          style={{maxWidth:320,overflow:"visible"}}>
-
-          {/* subtle bg track */}
-          <circle cx={cx} cy={cy} r={(R+ri)/2} fill="none"
-            stroke={T.bg2} strokeWidth={R-ri+2}/>
-
-          {/* slices */}
-          {slices.map(s=>(
-            <path key={s.b} d={s.d} fill={PC[s.b]} opacity={0.93}/>
-          ))}
-
-          {/* leader lines + labels — only for slices > 5% */}
-          {slices.filter(s=>s.raw>0.05).map(s=>(
-            <g key={s.b+"_lbl"}>
-              <line x1={s.lx1} y1={s.ly1} x2={s.lx2} y2={s.ly2}
-                stroke={PC[s.b]} strokeWidth="1.2" opacity="0.7"/>
-              <circle cx={s.lx2} cy={s.ly2} r="1.8" fill={PC[s.b]}/>
-              <text x={s.lx3} y={s.ly3}
-                textAnchor={s.right?"start":"end"}
-                dominantBaseline="middle"
-                fontSize="9.5" fontWeight="600"
-                fill={PC[s.b]} fontFamily="DM Mono,monospace">
-                {s.pct.toFixed(0)}%
-              </text>
-            </g>
-          ))}
-
-          {/* center hole */}
-          <circle cx={cx} cy={cy} r={ri-1} fill={T.bg1}/>
-
-          {/* center text */}
-          <text x={cx} y={cy-11} textAnchor="middle" fontSize="18"
-            fill={T.t1} fontFamily="DM Mono,monospace" fontWeight="500">
-            {(total/1000).toFixed(0)}K
-          </text>
-          <text x={cx} y={cy+8} textAnchor="middle" fontSize="9"
-            fill={T.t3} fontFamily="Inter,sans-serif" letterSpacing="0.5">
-            THB
-          </text>
-          <text x={cx} y={cy+22} textAnchor="middle" fontSize="7.5"
-            fill={T.t3} fontFamily="Inter,sans-serif" opacity="0.7">
-            135% basis
-          </text>
-        </svg>
-      </div>
-
-      {/* legend grid */}
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"5px 10px"}}>
-        {slices.map(s=>(
-          <div key={s.b} style={{display:"flex",alignItems:"center",gap:8,
-            padding:"7px 10px",borderRadius:8,background:T.bg2,
-            border:`1px solid ${T.b1}`}}>
-            <div style={{width:10,height:10,borderRadius:3,background:PC[s.b],
-              flexShrink:0,boxShadow:`0 0 7px ${PC[s.b]}55`}}/>
-            <span style={{fontSize:10,color:T.t1,fontWeight:500,flex:1,
-              whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-              {BE[s.b]} {s.b}
-            </span>
-            <span style={{fontFamily:"'DM Mono',monospace",fontSize:12,
-              fontWeight:600,color:PC[s.b],flexShrink:0}}>
-              {s.pct.toFixed(1)}%
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  h+='</div>';
+  if(total>0){
+    const usdthb=parseFloat(S.fx.usdthb)||33.5;
+    const ov=Object.keys(BC).filter(b=>(bp[b]||0)-(tgt[b]||0)>3).length;
+    const un=Object.keys(BC).filter(b=>(tgt[b]||0)-(bp[b]||0)>3).length;
+    h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="card"><span class="sl">Permanent</span>${Object.entries(PERM).map(([t,mn])=>{const p=sp[t]||0,ok=p>=mn;return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:${ok?'#10d9a0':'#f87171'}">${ok?'✓':'✗'}</span><span style="font-size:12px;font-weight:600;font-family:'DM Mono',monospace">${t}</span></div><span style="font-size:11px;color:#4e6478;font-family:'DM Mono',monospace">${p.toFixed(1)}%</span></div>`;}).join('')}</div>
+      <div class="card"><span class="sl">Summary</span>${[['Portfolio',(total/1000).toFixed(1)+'K THB','#38bdf8'],['USD','$'+(total/usdthb/1000).toFixed(0)+'K','#8aa0b4'],['Mode',mode,mm.color],['Over >3%',ov+'','#f97316'],['Under >3%',un+'','#60a5fa']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;color:#4e6478">${l}</span><span style="font-size:12px;font-weight:600;color:${c};font-family:'DM Mono',monospace">${v}</span></div>`).join('')}</div>
+    </div>`;
+    h+=buildPie(bp,total);
+  }
+  el.innerHTML=h;
 }
 
-// ─── APP ─────────────────────────────────────────────────────────────────────
-function App(){
-  const [tab,setTab]=useState("dash");
-  const [saved,setSaved]=useState(false);
-
-  const [mac,setMac]=useState({vix:"",oil:"",move:"",spx200:""});
-  const [shares,setShares]=useState(Object.fromEntries(ALL.map(t=>[t,""])));
-  const [prices,setPrices]=useState(Object.fromEntries(ALL.map(t=>[t,""])));
-  const [sav,setSav]=useState({iau:"",kgc:"",usdDep:""});
-  const [fx,setFx]=useState({usdthb:"33.5",budget:""});
-  const [pasteText,setPasteText]=useState("");
-  const [pasteStatus,setPasteStatus]=useState("");
-  const [lastRefresh,setLastRefresh]=useState("");
-  const [editTicker,setEditTicker]=useState(null);
-  const [editVal,setEditVal]=useState("");
-  const readyToSave=useRef(false);
-
-  // ── Load from localStorage on mount ──────────────────────────────────────────
-  useEffect(()=>{
-    const sh=LS.get(SK,null), pr=LS.get(PK,null), mc=LS.get(MK,null);
-    const fxD=LS.get(FK,null), svD=LS.get(SVK,null), lr=LS.get(LK,null);
-    if(sh) setShares(s=>({...s,...sh}));
-    if(pr) setPrices(p=>({...p,...pr}));
-    if(mc) setMac(m=>({...m,...mc}));
-    if(fxD) setFx(f=>({...f,...fxD}));
-    if(svD) setSav(v=>({...v,...svD}));
-    if(lr)  setLastRefresh(lr);
-    const nSh=Object.values(sh||{}).filter(v=>parseFloat(v)>0).length;
-    const nPr=Object.values(pr||{}).filter(v=>parseFloat(v)>0).length;
-    console.log('[01T] Loaded — shares:',nSh,'prices:',nPr);
-    setTimeout(()=>{ readyToSave.current=true; },300);
-  },[]);
-
-  // ── Auto-save on change (only after initial load) ─────────────────────────────
-  useEffect(()=>{ if(readyToSave.current){ LS.set(MK,mac); } },[mac]);
-  useEffect(()=>{ if(readyToSave.current){ LS.set(SVK,sav); } },[sav]);
-  useEffect(()=>{ if(readyToSave.current){ LS.set(FK,fx); } },[fx]);
-  useEffect(()=>{ if(readyToSave.current){ LS.set(PK,prices); setSaved(false); } },[prices]);
-  useEffect(()=>{ if(readyToSave.current&&lastRefresh){ LS.set(LK,lastRefresh); } },[lastRefresh]);
-  useEffect(()=>{
-    if(!readyToSave.current) return;
-    setSaved(false);
-    const t=setTimeout(()=>{ LS.set(SK,shares); setSaved(true); setTimeout(()=>setSaved(false),2000); },600);
-    return()=>clearTimeout(t);
-  },[shares]);
-
-  const saveNow=useCallback(()=>{
-    readyToSave.current=true;
-    LS.set(SK,shares); LS.set(PK,prices); LS.set(MK,mac);
-    LS.set(SVK,sav); LS.set(FK,fx);
-    if(lastRefresh) LS.set(LK,lastRefresh);
-    setSaved(true);
-    setTimeout(()=>setSaved(false),2000);
-    console.log('[01T] Manual save ok');
-  },[shares,prices,mac,sav,fx,lastRefresh]);
-
-  function calcActions(budget){
-    if(!budget||total===0)return[];
-    const pri=AP[mode]||AP.NEUTRAL;
-    const out=[]; let rem=budget;
-    for(const bucket of pri){
-      if(rem<=0)break;
-      const gap=tgtM[bucket]-(bp[bucket]||0);
-      if(gap<=1)continue;
-      const need=(gap/135)*total;
-      const stocks=ALL.filter(t=>BM[t]===bucket).map(t=>({
-        t,gap:(BH[bucket]?.[mode]?.[t]??0)-(sp[t]||0),tgt2:BH[bucket]?.[mode]?.[t]??0
-      })).filter(s=>s.gap>0.5).sort((a,b)=>b.gap-a.gap);
-      for(const s of stocks){
-        if(rem<=0)break;
-        const amt=Math.min((s.gap/135)*total,rem,need);
-        if(amt>200){out.push({ticker:s.t,bucket,amount:Math.round(amt/100)*100,gap:s.gap,tgt2:s.tgt2});rem-=amt;}
-      }
-    }
-    return out;
-  }
-  function calcRebal(){
-    if(total===0)return[];
-    return ALL.map(t=>{
-      const b=BM[t],tp=BH[b]?.[mode]?.[t]??0,cp=sp[t]||0,gap=tp-cp;
-      return{ticker:t,bucket:b,cp,tp,gap,gapT:(gap/135)*total};
-    }).filter(r=>Math.abs(r.gapT)>100).sort((a,b)=>b.gap-a.gap);
-  }
-
-  const actions=calcActions(bgt), rebal=calcRebal();
-
-  // Paste parser
-  function parsePaste(raw){
-    const np={...prices}; let found=0;
-    // Strip markdown artifacts: backticks, code fences, leading/trailing whitespace
-    let cleaned=raw.replace(/```[a-z]*/gi,"").replace(/```/g,"").replace(/`/g,"").trim();
-    function applyKey(k,val){
-      let key=k.toUpperCase().trim();
-      if(key==="BRKB"){key="BRK-B";}
-      if(np[key]!==undefined&&val>0){np[key]=String(val);found++;return true;}
-      return false;
-    }
-    // Try JSON parse first
-    try{
-      const j=JSON.parse(cleaned);
-      Object.keys(j).forEach(k=>applyKey(k,parseFloat(j[k])));
-      if(found>0) return{np,found};
-    } catch{}
-    // Fallback: "TICKER": 123.45 or TICKER 123.45 patterns (include BRK-B with dash)
-    const matches=[...cleaned.matchAll(/"?([A-Z][A-Z0-9\-+]{1,9})"?\s*[:\s,]+\s*\$?([0-9]+\.?[0-9]*)/g)];
-    matches.forEach(m=>applyKey(m[1],parseFloat(m[2])));
-    return{np,found};
-  }
-
-  function openEdit(ticker){ setEditTicker(ticker); setEditVal(shares[ticker]||""); }
-  function closeEdit(){ setEditTicker(null); setEditVal(""); }
-  function saveEdit(){ if(editTicker){ setShares(s=>({...s,[editTicker]:editVal})); closeEdit(); } }
-
-  const TABS=[
-    {id:"dash",   label:"Dashboard"},
-    {id:"port",   label:"Portfolio"},
-    {id:"prices", label:"Prices"},
-    {id:"act",    label:"Action"},
-    {id:"nw",     label:"Net Worth"},
-    {id:"tgt",    label:"Target"},
-    {id:"macro",  label:"Macro"},
-  ];
-
-  if(loading) return(
-    <div style={{minHeight:"100vh",background:T.bg0,display:"flex",alignItems:"center",
-      justifyContent:"center",flexDirection:"column",gap:12}}>
-      <style>{`@keyframes sl{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}`}</style>
-      <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:22,fontWeight:800,color:T.a,letterSpacing:3}}>01T</div>
-      <div style={{fontSize:11,color:T.t3}}>Loading…</div>
-      <div style={{width:100,height:2,background:T.b1,borderRadius:2,overflow:"hidden"}}>
-        <div style={{width:"35%",height:"100%",background:T.a,borderRadius:2,animation:"sl 1.2s ease-in-out infinite"}}/>
-      </div>
-    </div>
-  );
-
-  return(
-    <div style={{minHeight:"100vh",background:T.bg0,fontFamily:"'Inter',sans-serif",color:T.t1,fontSize:14}}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap');
-        *{box-sizing:border-box;margin:0;padding:0;}
-        input:focus{outline:none!important;}
-        input[type=number]::-webkit-inner-spin-button{opacity:0;}
-        ::-webkit-scrollbar{width:3px;height:3px;}
-        ::-webkit-scrollbar-track{background:${T.bg0};}
-        ::-webkit-scrollbar-thumb{background:${T.b2};border-radius:2px;}
-        .tab-btn{transition:all .15s;}
-        .tab-btn:hover{color:${T.t1}!important;background:${T.bg2}!important;}
-        .row-hover:hover{background:${T.bg2}!important;}
-        .stock-card:hover{border-color:${T.b2}!important;}
-      `}</style>
-
-      {/* ─ HEADER ─ */}
-      <div style={{position:"sticky",top:0,zIndex:50,background:"rgba(7,9,14,.94)",
-        backdropFilter:"blur(20px)",borderBottom:`1px solid ${T.b1}`,
-        padding:"0 20px",height:54,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <div style={{display:"flex",alignItems:"center",gap:16}}>
-          <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:18,fontWeight:800,color:T.a,letterSpacing:3}}>01T</div>
-          <div style={{fontSize:9,color:T.t3,letterSpacing:"2px",fontFamily:"'DM Mono',monospace"}}>PORTFOLIO · 135%</div>
-        </div>
-        <div style={{display:"flex",gap:8,alignItems:"center"}}>
-          {mode!=="UNKNOWN"&&(
-            <div style={{padding:"4px 14px",borderRadius:20,fontSize:11,fontWeight:600,
-              background:mm.bg,color:mm.color,border:`1px solid ${mm.border}`}}>
-              {mm.label}
-            </div>
-          )}
-          {total>0&&<div style={{fontSize:10,color:T.t3,fontFamily:"'DM Mono',monospace"}}>{(total/1000).toFixed(1)}K</div>}
-          <button onClick={saveNow} style={{
-            background:saved?"rgba(16,217,160,.15)":"rgba(56,189,248,.15)",
-            border:`1px solid ${saved?"rgba(16,217,160,.4)":"rgba(56,189,248,.4)"}`,
-            color:saved?"#10d9a0":"#38bdf8",
-            borderRadius:8,padding:"5px 12px",minWidth:64,
-            fontSize:11,fontWeight:600,cursor:"pointer",
-            fontFamily:"'Inter',sans-serif",transition:"all .3s",
-            WebkitTapHighlightColor:"transparent"}}>
-            {saved?"✓ Saved":"💾 Save"}
-          </button>
-        </div>
-      </div>
-
-      {/* ─ TABS ─ */}
-      <div style={{display:"flex",padding:"0 20px",borderBottom:`1px solid ${T.b1}`,overflowX:"auto",gap:2}}>
-        {TABS.map(t=>(
-          <button key={t.id} className="tab-btn" onClick={()=>setTab(t.id)} style={{
-            padding:"10px 14px",border:"none",cursor:"pointer",fontSize:12,fontWeight:tab===t.id?600:400,
-            whiteSpace:"nowrap",background:"transparent",fontFamily:"'Inter',sans-serif",
-            color:tab===t.id?T.a:T.t3,
-            borderBottom:tab===t.id?`2px solid ${T.a}`:"2px solid transparent",
-          }}>{t.label}</button>
-        ))}
-      </div>
-
-      <div style={{padding:"16px 20px",maxWidth:960,margin:"0 auto"}}>
-
-        {/* ══════════════ DASHBOARD ══════════════ */}
-        {tab==="dash"&&(
-          <div>
-            {/* Macro inputs */}
-            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:12}}>
-              {[
-                {label:"VIX",k:"vix",ph:"26",fn:sVIX},
-                {label:"OIL WTI $",k:"oil",ph:"98",fn:sOil},
-                {label:"MOVE",k:"move",ph:"85",fn:sMOVE},
-                {label:"SPX vs 200MA%",k:"spx200",ph:"-4.4",fn:sSPX},
-              ].map(f=>{
-                // allow raw string so "-" alone doesn't get wiped
-                const raw=mac[f.k]??"";
-                const n=parseFloat(raw);
-                const sig=(!isNaN(n)&&raw.trim()!=="-"&&raw.trim()!=="")
-                  ?f.fn(n):null;
-                const c=sig?MM[sig].color:T.b2;
-                return(
-                  <div key={f.k} style={{background:T.bg1,border:`1px solid ${c}44`,borderRadius:12,padding:"12px 14px"}}>
-                    <div style={{fontSize:9,color:T.t3,letterSpacing:"1px",fontWeight:600,marginBottom:6}}>{f.label}</div>
-                    <input
-                      type="text"
-                      inputMode="text"
-                      value={raw}
-                      onChange={e=>{
-                        const v=e.target.value;
-                        if(v===""||v==="-"||/^-?\d*\.?\d*$/.test(v)){
-                          setMac(m=>({...m,[f.k]:v}));
-                        }
-                      }}
-                      placeholder={f.ph}
-                      style={{...IS,fontSize:22,fontWeight:700,color:sig?c:T.t3,fontFamily:"'DM Mono',monospace"}}
-                    />
-                    {sig&&(
-                      <div style={{display:"flex",alignItems:"center",gap:5,marginTop:6}}>
-                        <ModeDot mode={sig}/>
-                        <span style={{fontSize:9,fontWeight:600,color:c}}>{sig}</span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Mode banner */}
-            <div style={{background:mm.bg,border:`1px solid ${mm.border}`,borderRadius:12,
-              padding:"12px 16px",marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-              <div>
-                <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:18,fontWeight:700,color:mm.color}}>{mm.label}</div>
-                <div style={{fontSize:11,color:T.t3,marginTop:2}}>{mm.desc}</div>
-              </div>
-              <div style={{display:"flex",gap:12}}>
-                {Object.entries(sigs).map(([k,s])=>(
-                  <div key={k} style={{textAlign:"center"}}>
-                    <div style={{fontSize:8,color:T.t3,marginBottom:4,fontFamily:"'DM Mono',monospace"}}>{k}</div>
-                    <ModeDot mode={s}/>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Buckets */}
-            <Card style={{marginBottom:10}}>
-              <SLabel>Bucket Allocation {mode!=="UNKNOWN"?`· ${mode}`:""} {total>0?`· ${(total/1000).toFixed(1)}K THB`:""}</SLabel>
-              {Object.keys(BC).map(b=>{
-                const pct=bp[b], t2=tgtM[b], gap=pct-t2;
-                const gc=Math.abs(gap)<=3?"#10d9a0":gap>0?"#f97316":"#60a5fa";
-                return(
-                  <div key={b} style={{marginBottom:12}}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5}}>
-                      <div style={{display:"flex",alignItems:"center",gap:7}}>
-                        <span style={{fontSize:14}}>{BE[b]}</span>
-                        <span style={{fontSize:12,fontWeight:600,color:BC[b]}}>{b}</span>
-                      </div>
-                      <div style={{display:"flex",gap:6,alignItems:"center"}}>
-                        <span style={{fontSize:12,fontWeight:700,fontFamily:"'DM Mono',monospace"}}>{total>0?pct.toFixed(1):"—"}%</span>
-                        <span style={{fontSize:10,color:T.t3}}>/{t2}%</span>
-                        {total>0&&<Badge color={gc} bg={`${gc}18`}>{gap>0?"+":""}{gap.toFixed(1)}%</Badge>}
-                      </div>
-                    </div>
-                    <Bar pct={pct} target={t2} color={BC[b]}/>
-                  </div>
-                );
-              })}
-            </Card>
-
-            {total>0&&(
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-                <Card>
-                  <SLabel>Permanent Holdings</SLabel>
-                  {Object.entries(PERM).map(([t,mn])=>{
-                    const p=sp[t]||0, ok=p>=mn;
-                    return(
-                      <div key={t} style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                        <div style={{display:"flex",alignItems:"center",gap:6}}>
-                          <span style={{fontSize:11,color:ok?"#10d9a0":"#f87171"}}>{ok?"✓":"✗"}</span>
-                          <span style={{fontSize:12,fontWeight:600,fontFamily:"'DM Mono',monospace"}}>{t}</span>
-                        </div>
-                        <div style={{fontSize:11,color:T.t3,fontFamily:"'DM Mono',monospace"}}>{p.toFixed(1)}%<span style={{color:T.t3,fontSize:9,marginLeft:4}}>min {mn}%</span></div>
-                      </div>
-                    );
-                  })}
-                </Card>
-                <Card>
-                  <SLabel>Summary</SLabel>
-                  {[
-                    ["Portfolio", `${(total/1000).toFixed(1)}K THB`, T.a],
-                    ["USD", `$${(total/usdthb).toFixed(0)}`, T.t2],
-                    ["Mode", mode, mm.color],
-                    ["Over >3%", Object.keys(BC).filter(b=>bp[b]-tgtM[b]>3).length+"", "#f97316"],
-                    ["Under >3%", Object.keys(BC).filter(b=>tgtM[b]-bp[b]>3).length+"", "#60a5fa"],
-                  ].map(([l,v,c])=>(
-                    <div key={l} style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                      <span style={{fontSize:11,color:T.t3}}>{l}</span>
-                      <span style={{fontSize:12,fontWeight:600,color:c,fontFamily:"'DM Mono',monospace"}}>{v}</span>
-                    </div>
-                  ))}
-                </Card>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ══ DASHBOARD EXTRAS: Pie chart ══ */}
-        {tab==="dash"&&total>0&&<PieChart bp={bp} total={total}/>}
-
-        {/* ══ PORTFOLIO ══ */}
-        {tab==="port"&&(
-          <div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-              <div style={{fontSize:10,color:T.t3}}>
-                {lastRefresh
-                  ?<span style={{color:"#10d9a0"}}>ราคา: อัปเดต {lastRefresh}</span>
-                  :<span>ยังไม่มีราคา · <span style={{color:T.a,cursor:"pointer",textDecoration:"underline"}}
-                      onClick={()=>setTab("prices")}>ไป Prices →</span></span>
-                }
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:10,color:saved?"#10d9a0":T.t3}}>{saved?"✓":""}</span>
-                <button onClick={()=>{if(window.confirm("ล้าง shares ทั้งหมด?")){
-                  setShares(Object.fromEntries(ALL.map(t=>[t,""])));
-                  localStorage.removeItem(SK);setSaved(false);
-                }}} style={{background:T.bg2,border:"1px solid rgba(248,113,113,.3)",color:"#f87171",
-                  borderRadius:8,padding:"5px 12px",fontSize:11,cursor:"pointer",fontFamily:"'Inter',sans-serif"}}>Clear</button>
-              </div>
-            </div>
-            <div style={{fontSize:10,color:T.t3,marginBottom:12,padding:"7px 12px",background:T.bg2,borderRadius:8}}>
-              💡 กด card เพื่อกรอกจำนวนหุ้น · มูลค่า = shares × price × {usdthb} THB/USD
-            </div>
-            {Object.keys(BC).map(bucket=>{
-              const bpct=bp[bucket],btgt=tgtM[bucket],bgap=bpct-btgt;
-              const gc=Math.abs(bgap)<=3?"#10d9a0":bgap>0?"#f97316":"#60a5fa";
-              return(
-                <div key={bucket} style={{marginBottom:20}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,
-                    paddingBottom:8,borderBottom:`1px solid ${BC[bucket]}22`}}>
-                    <span style={{fontSize:15}}>{BE[bucket]}</span>
-                    <span style={{fontSize:13,fontWeight:600,color:BC[bucket]}}>{bucket}</span>
-                    <span style={{fontSize:10,color:T.t3,fontFamily:"'DM Mono',monospace"}}>
-                      {total>0?bpct.toFixed(1):"—"}% / {btgt}%
-                    </span>
-                    {total>0&&<Badge color={gc} bg={gc+"18"}>{bgap>0?"+":""}{bgap.toFixed(1)}%</Badge>}
-                    {bv[bucket]>0&&<span style={{marginLeft:"auto",fontSize:10,color:T.t3,
-                      fontFamily:"'DM Mono',monospace"}}>{bv[bucket].toLocaleString()}</span>}
-                  </div>
-                  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(148px,1fr))",gap:6}}>
-                    {ALL.filter(t=>BM[t]===bucket).map(ticker=>{
-                      const tgtPct=BH[bucket]?.[mode]?.[ticker]??0;
-                      const curPct=sp[ticker]||0,gap2=curPct-tgtPct;
-                      const gc2=Math.abs(gap2)<=1?"#10d9a0":gap2>0?"#f97316":"#60a5fa";
-                      const sh=parseFloat(shares[ticker])||0;
-                      const pr=parseFloat(prices[ticker])||0;
-                      const thbVal=sh>0&&pr>0?Math.round(sh*pr*usdthb):0;
-                      const has=thbVal>0;
-                      const col=BC[bucket];
-                      return(
-                        <div key={ticker} className="stock-card" onClick={()=>openEdit(ticker)}
-                          style={{background:has?T.bg2:T.bg1,borderRadius:10,padding:"10px 12px",
-                            border:"1px solid "+(has?col+"44":T.b1),transition:"all .2s",cursor:"pointer"}}>
-                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                            <span style={{fontSize:12,fontWeight:600,color:has?col:T.t3,
-                              fontFamily:"'DM Mono',monospace",letterSpacing:".3px"}}>{ticker}</span>
-                            {total>0&&tgtPct>0&&has&&
-                              <Badge color={gc2} bg={gc2+"15"}>{gap2>0?"+":""}{gap2.toFixed(1)}%</Badge>}
-                          </div>
-                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
-                            <div>
-                              <div style={{fontSize:11,color:pr>0?T.a:T.t3,
-                                fontFamily:"'DM Mono',monospace",lineHeight:1.3}}>
-                                {pr>0?"$"+pr:"—"}
-                              </div>
-                              <div style={{fontSize:9,color:sh>0?"#10d9a0":T.t3,
-                                fontFamily:"'DM Mono',monospace",marginTop:2}}>
-                                {sh>0?sh+" sh":"tap +"}
-                              </div>
-                            </div>
-                            <div style={{textAlign:"right"}}>
-                              {has
-                                ?<div style={{fontFamily:"'DM Mono',monospace",fontSize:14,
-                                    fontWeight:500,color:"#a5f3fc",letterSpacing:"-.5px"}}>
-                                    {thbVal.toLocaleString()}
-                                  </div>
-                                :<div style={{fontSize:9,color:T.t3}}>{"tgt "+tgtPct+"%"}</div>}
-                              {has&&<div style={{fontSize:8,color:T.t3,marginTop:1}}>{"tgt "+tgtPct+"%"}</div>}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* ── Modal: edit shares ── */}
-        {editTicker&&(
-          <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.75)",
-            display:"flex",alignItems:"center",justifyContent:"center",
-            zIndex:200,backdropFilter:"blur(6px)"}} onClick={closeEdit}>
-            <div style={{background:T.bg1,border:"1px solid "+T.b2,borderRadius:16,
-              padding:"24px 28px",width:280,boxShadow:"0 24px 64px rgba(0,0,0,.7)"}}
-              onClick={e=>e.stopPropagation()}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:18}}>
-                <div>
-                  <div style={{fontSize:20,fontWeight:600,fontFamily:"'DM Mono',monospace",
-                    color:BC[BM[editTicker]]||T.a}}>{editTicker}</div>
-                  <div style={{fontSize:10,color:T.t3,marginTop:2}}>{BM[editTicker]}</div>
-                  {parseFloat(prices[editTicker])>0&&(
-                    <div style={{fontSize:11,color:T.t3,marginTop:5}}>
-                      <span style={{color:T.a}}>${prices[editTicker]}</span>
-                      {parseFloat(editVal)>0&&(
-                        <span style={{color:"#10d9a0",marginLeft:8}}>
-                          → {Math.round(parseFloat(editVal)*parseFloat(prices[editTicker])*usdthb).toLocaleString()} THB
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <button onClick={closeEdit} style={{background:"transparent",border:"none",
-                  color:T.t3,fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
-              </div>
-              <div style={{fontSize:9,color:T.t3,marginBottom:8,letterSpacing:"1.5px"}}>SHARES</div>
-              <input autoFocus type="text" inputMode="decimal" value={editVal}
-                onChange={e=>{ if(e.target.value===""||/^\d*\.?\d*$/.test(e.target.value)) setEditVal(e.target.value); }}
-                onKeyDown={e=>{ if(e.key==="Enter")saveEdit(); if(e.key==="Escape")closeEdit(); }}
-                placeholder="0"
-                style={{...IS,fontSize:34,fontWeight:500,color:T.a,fontFamily:"'DM Mono',monospace",
-                  borderBottom:"2px solid "+T.a+"33",paddingBottom:8,marginBottom:22,display:"block"}}/>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-                <button onClick={closeEdit} style={{background:T.bg2,border:"1px solid "+T.b1,
-                  color:T.t3,borderRadius:8,padding:"9px",fontSize:12,
-                  cursor:"pointer",fontFamily:"'Inter',sans-serif"}}>Cancel</button>
-                <button onClick={saveEdit} style={{background:"rgba(56,189,248,.1)",
-                  border:"1px solid "+T.a+"33",color:T.a,borderRadius:8,padding:"9px",
-                  fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"'Inter',sans-serif"}}>Save</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ══ PRICES ══ */}
-        {tab==="prices"&&(
-          <div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
-              <div>
-                <div style={{fontSize:13,fontWeight:600,color:T.t1,marginBottom:3}}>ราคาหุ้น</div>
-                <div style={{fontSize:10,color:T.t3}}>
-                  {lastRefresh
-                    ?<span>อัปเดต <span style={{color:"#10d9a0"}}>{lastRefresh}</span> · auto-saved</span>
-                    :"ยังไม่มีราคา — วาง JSON หรือกรอกทีละตัว"}
-                </div>
-              </div>
-              <button onClick={()=>{
-                storageSet(PK,prices).then(()=>setPasteStatus("✓ Saved!"));
-                storageSet(LK,lastRefresh);
-                setTimeout(()=>setPasteStatus(""),3000);
-              }} style={{background:"rgba(16,217,160,.1)",border:"1px solid rgba(16,217,160,.3)",
-                color:"#10d9a0",borderRadius:8,padding:"6px 14px",fontSize:11,fontWeight:600,
-                cursor:"pointer",fontFamily:"'Inter',sans-serif",flexShrink:0}}>
-                💾 Save Now
-              </button>
-            </div>
-            <div style={{background:T.bg1,border:`1px solid ${T.b1}`,borderRadius:14,padding:"16px 18px",marginBottom:14}}>
-              <div style={{fontSize:9,fontWeight:600,color:T.t3,letterSpacing:"2px",
-                marginBottom:12,paddingBottom:8,borderBottom:`1px solid ${T.b1}`}}>PASTE JSON จากฟิน</div>
-              <textarea value={pasteText} onChange={e=>setPasteText(e.target.value)}
-                placeholder={'{"NVDA":174.9,"GOOGL":301,...}'}
-                rows={3}
-                style={{width:"100%",background:T.bg2,border:`1px solid ${T.b1}`,borderRadius:8,
-                  color:T.t1,padding:"10px 12px",fontSize:11,fontFamily:"'DM Mono',monospace",
-                  resize:"vertical",outline:"none",lineHeight:1.6,boxSizing:"border-box"}}/>
-              {pasteStatus&&(
-                <div style={{marginTop:8,fontSize:11,color:pasteStatus.startsWith("✓")?"#10d9a0":"#f97316"}}>
-                  {pasteStatus}
-                </div>
-              )}
-              <div style={{display:"flex",gap:8,marginTop:10}}>
-                <button onClick={()=>{
-                  if(!pasteText.trim()){setPasteStatus("⚠ วางข้อความก่อน");return;}
-                  const{np,found}=parsePaste(pasteText.trim());
-                  if(found===0){setPasteStatus("⚠ ไม่พบราคา ตรวจสอบ format");return;}
-                  setPrices(np);
-                  const now=new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"});
-                  setLastRefresh(now);
-                  // Explicit immediate save (don't rely solely on useEffect)
-                  storageSet(PK,np).then(r=>console.log("[01T] Prices explicit save:",r?"ok":"fail"));
-                  storageSet(LK,now);
-                  setPasteStatus("✓ อัปเดต "+found+" ตัว · บันทึกแล้ว");
-                  setPasteText("");
-                  setTimeout(()=>setPasteStatus(""),5000);
-                }} style={{flex:1,background:T.a,border:"none",color:T.bg0,borderRadius:8,
-                  padding:"9px",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"'Inter',sans-serif"}}>
-                  Parse & Update
-                </button>
-                <button onClick={()=>{setPasteText("");setPasteStatus("");}}
-                  style={{background:T.bg2,border:`1px solid ${T.b1}`,color:T.t3,
-                    borderRadius:8,padding:"9px 16px",fontSize:12,cursor:"pointer",fontFamily:"'Inter',sans-serif"}}>
-                  Clear
-                </button>
-              </div>
-            </div>
-            {Object.keys(BC).map(bucket=>{
-              const tickers=ALL.filter(t=>BM[t]===bucket);
-              return(
-                <div key={bucket} style={{marginBottom:12}}>
-                  <div style={{fontSize:11,fontWeight:600,color:BC[bucket],marginBottom:5,
-                    display:"flex",alignItems:"center",gap:6}}>{BE[bucket]} {bucket}</div>
-                  <div style={{background:T.bg1,border:`1px solid ${T.b1}`,borderRadius:12,overflow:"hidden"}}>
-                    {tickers.map((ticker,i)=>{
-                      const pr=parseFloat(prices[ticker]);
-                      return(
-                        <div key={ticker} style={{display:"flex",justifyContent:"space-between",
-                          alignItems:"center",padding:"8px 16px",
-                          borderBottom:i<tickers.length-1?`1px solid ${T.b1}`:"none"}}>
-                          <span style={{fontFamily:"'DM Mono',monospace",fontSize:13,
-                            fontWeight:500,color:pr>0?T.t1:T.t3,minWidth:80}}>{ticker}</span>
-                          <div style={{display:"flex",alignItems:"center",gap:4}}>
-                            <span style={{fontSize:11,color:T.t3}}>$</span>
-                            <input type="text" inputMode="decimal"
-                              value={prices[ticker]||""}
-                              onChange={e=>{
-                                const v=e.target.value;
-                                if(v===""||/^\d*\.?\d*$/.test(v)) setPrices(p=>({...p,[ticker]:v}));
-                              }}
-                              style={{...IS,fontSize:13,fontWeight:500,color:pr>0?T.a:T.t3,
-                                textAlign:"right",width:90}}/>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* ══════════════ ACTION ══════════════ */}
-        {tab==="act"&&(
-          <div>
-            {/* Budget input */}
-            <Card style={{marginBottom:14}}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr auto",gap:16,alignItems:"center"}}>
-                <div>
-                  <div style={{fontSize:10,color:T.t3,letterSpacing:"1px",fontWeight:500,marginBottom:8}}>งบลงทุนเดือนนี้ (THB)</div>
-                  <input type="number" value={fx.budget} onChange={e=>setFx(f=>({...f,budget:e.target.value}))}
-                    placeholder="20000" style={{...IS,fontSize:28,fontWeight:700,color:T.a,fontFamily:"'Space Grotesk',sans-serif"}}/>
-                </div>
-                <div style={{textAlign:"right"}}>
-                  <div style={{fontSize:10,color:T.t3,marginBottom:4}}>Mode</div>
-                  <div style={{fontSize:14,fontWeight:600,color:mm.color}}>{mm.label}</div>
-                  {total>0&&<div style={{fontSize:10,color:T.t3,marginTop:4,fontFamily:"'DM Mono',monospace"}}>{(total/1000).toFixed(1)}K THB</div>}
-                </div>
-              </div>
-            </Card>
-
-            {/* Action list */}
-            {total===0&&<div style={{textAlign:"center",padding:"40px",color:T.t3}}>← กรอกพอร์ตใน Portfolio ก่อน</div>}
-            {total>0&&!bgt&&<div style={{textAlign:"center",padding:"40px",color:T.t3}}>← กรอกงบลงทุนด้านบน</div>}
-            {total>0&&bgt>0&&actions.length===0&&(
-              <Card><div style={{color:"#10d9a0",textAlign:"center",padding:"12px",fontWeight:500}}>✅ พอร์ตสมดุลดีแล้ว ไม่มี action เร่งด่วน</div></Card>
-            )}
-            {actions.length>0&&(
-              <div>
-                <div style={{fontSize:10,color:T.t3,marginBottom:10}}>ลำดับซื้อจาก {bgt.toLocaleString()} THB · priority {mode} mode</div>
-                {actions.map((a,i)=>{
-                  const bc=BC[a.bucket];
-                  return(
-                    <div key={a.ticker} className="row-hover" style={{
-                      display:"flex",alignItems:"center",gap:12,background:T.bg1,
-                      border:`1px solid ${bc}22`,borderRadius:12,padding:"12px 16px",marginBottom:6,transition:"all .15s",
-                    }}>
-                      <div style={{width:26,height:26,borderRadius:"50%",background:`${bc}18`,border:`1px solid ${bc}33`,
-                        display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:bc,flexShrink:0}}>
-                        {i+1}
-                      </div>
-                      <div style={{flex:1}}>
-                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:3}}>
-                          <span style={{fontSize:13,fontWeight:600,fontFamily:"'DM Mono',monospace"}}>{a.ticker}</span>
-                          <span style={{fontSize:12}}>{BE[a.bucket]}</span>
-                          <span style={{fontSize:10,color:T.t3}}>under {a.gap.toFixed(1)}%</span>
-                        </div>
-                        <div style={{fontSize:10,color:T.t3}}>target {a.tgt2}% · current {(sp[a.ticker]||0).toFixed(1)}%</div>
-                      </div>
-                      <div style={{textAlign:"right"}}>
-                        <div style={{fontSize:16,fontWeight:700,color:T.a,fontFamily:"'Space Grotesk',sans-serif"}}>{a.amount.toLocaleString()}</div>
-                        <div style={{fontSize:9,color:T.t3}}>THB</div>
-                      </div>
-                    </div>
-                  );
-                })}
-                <div style={{background:T.bg2,borderRadius:10,padding:"10px 16px",marginTop:8,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                  <span style={{fontSize:11,color:T.t3}}>รวมแนะนำ</span>
-                  <span style={{fontSize:14,fontWeight:700,color:T.a,fontFamily:"'DM Mono',monospace"}}>{actions.reduce((s,a)=>s+a.amount,0).toLocaleString()} THB</span>
-                </div>
-              </div>
-            )}
-
-            {/* Rebalance */}
-            <div style={{marginTop:20}}>
-              <SLabel>Rebalance Calculator</SLabel>
-              {total===0&&<div style={{textAlign:"center",padding:"20px",color:T.t3}}>กรอกพอร์ตก่อน</div>}
-              {total>0&&rebal.length===0&&(
-                <Card><div style={{color:"#10d9a0",textAlign:"center",padding:"10px",fontWeight:500}}>✅ ทุก position ใกล้เคียง target แล้ว</div></Card>
-              )}
-              {rebal.length>0&&(
-                <div>
-                  <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:12}}>
-                    {[
-                      ["ต้องซื้อเพิ่ม", rebal.filter(r=>r.gap>0).length+" ตัว", "#10d9a0"],
-                      ["พิจารณา Trim", rebal.filter(r=>r.gap<0).length+" ตัว", "#f97316"],
-                      ["งบที่ต้องการ", `${Math.round(rebal.filter(r=>r.gap>0).reduce((s,r)=>s+r.gapT,0)/100)*100|0} THB`, T.a],
-                    ].map(([l,v,c])=>(
-                      <div key={l} style={{background:T.bg2,borderRadius:10,padding:"12px",textAlign:"center"}}>
-                        <div style={{fontSize:9,color:T.t3,marginBottom:5}}>{l}</div>
-                        <div style={{fontSize:14,fontWeight:700,color:c,fontFamily:"'DM Mono',monospace"}}>{v}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{overflowX:"auto"}}>
-                    <table style={{width:"100%",borderCollapse:"separate",borderSpacing:"0 4px",fontSize:11}}>
-                      <thead>
-                        <tr>{["Ticker","Bucket","Current","Target","Gap","THB"].map(h=>(
-                          <th key={h} style={{textAlign:h==="THB"?"right":"left",color:T.t3,padding:"4px 8px",fontWeight:500,fontSize:9,letterSpacing:"1px"}}>{h}</th>
-                        ))}</tr>
-                      </thead>
-                      <tbody>
-                        {rebal.map(r=>{
-                          const buy=r.gap>0, bc=BC[r.bucket];
-                          return(
-                            <tr key={r.ticker} className="row-hover">
-                              <td style={{padding:"8px 8px",fontWeight:600,fontFamily:"'DM Mono',monospace",background:T.bg1,borderRadius:"8px 0 0 8px"}}>{r.ticker}</td>
-                              <td style={{padding:"8px 8px",background:T.bg1}}><span style={{fontSize:10,color:bc}}>{BE[r.bucket]}</span></td>
-                              <td style={{padding:"8px 8px",fontFamily:"'DM Mono',monospace",background:T.bg1,color:T.t2}}>{r.cp.toFixed(1)}%</td>
-                              <td style={{padding:"8px 8px",fontFamily:"'DM Mono',monospace",background:T.bg1,color:T.t2}}>{r.tp}%</td>
-                              <td style={{padding:"8px 8px",fontFamily:"'DM Mono',monospace",background:T.bg1,color:buy?"#60a5fa":"#f97316",fontWeight:600}}>{buy?"+":""}{r.gap.toFixed(1)}%</td>
-                              <td style={{padding:"8px 8px",fontFamily:"'DM Mono',monospace",background:T.bg1,borderRadius:"0 8px 8px 0",textAlign:"right",color:buy?"#10d9a0":"#f97316",fontWeight:600}}>{buy?"+":""}{Math.round(r.gapT).toLocaleString()}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* ══════════════ NET WORTH ══════════════ */}
-        {tab==="nw"&&(
-          <div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
-              <div>
-                <div style={{fontSize:10,color:T.t3,letterSpacing:"1px",fontWeight:500,marginBottom:6}}>USD/THB</div>
-                <input type="number" value={fx.usdthb} onChange={e=>setFx(f=>({...f,usdthb:e.target.value}))}
-                  style={{...IS,fontSize:24,fontWeight:700,color:T.a,fontFamily:"'DM Mono',monospace"}}/>
-              </div>
-            </div>
-
-            {/* Net Worth Cards */}
-            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:14}}>
-              {[
-                ["01T Portfolio", `${(total/1000).toFixed(1)}K`, T.a],
-                ["Gold Saving", `${(((parseFloat(sav.iau)||0)+(parseFloat(sav.kgc)||0))/1000).toFixed(1)}K`, "#fbbf24"],
-                ["USD Deposit", `${((parseFloat(sav.usdDep)||0)*usdthb/1000).toFixed(1)}K`, "#a78bfa"],
-              ].map(([l,v,c])=>(
-                <div key={l} style={{background:T.bg1,border:`1px solid ${T.b1}`,borderRadius:12,padding:"14px 16px",textAlign:"center"}}>
-                  <div style={{fontSize:9,color:T.t3,marginBottom:6}}>{l}</div>
-                  <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:20,fontWeight:700,color:c}}>{v}K</div>
-                  <div style={{fontSize:9,color:T.t3,marginTop:2}}>THB</div>
-                </div>
-              ))}
-            </div>
-
-            <Card style={{marginBottom:12,border:`1px solid ${T.a}22`}}>
-              <div style={{fontSize:10,color:T.t3,marginBottom:6}}>Total Net Worth</div>
-              <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:32,fontWeight:800,color:T.a}}>{(nw/1000).toFixed(1)}K THB</div>
-              <div style={{fontSize:11,color:T.t3,marginTop:4}}>${(nw/usdthb).toFixed(0)} USD</div>
-            </Card>
-
-            <Card>
-              <SLabel>Gold Saving</SLabel>
-              {[
-                {label:"IAU (THB)",k:"iau",ph:"0"},
-                {label:"KGC (THB)",k:"kgc",ph:"0"},
-                {label:"USD Deposit",k:"usdDep",ph:"0"},
-              ].map(f=>(
-                <div key={f.k} style={{marginBottom:12}}>
-                  <div style={{fontSize:10,color:T.t3,marginBottom:5}}>{f.label}</div>
-                  <input type="number" value={sav[f.k]} onChange={e=>setSav(s=>({...s,[f.k]:e.target.value}))}
-                    placeholder={f.ph} style={{...IS,fontSize:18,fontWeight:600,color:T.t1,fontFamily:"'DM Mono',monospace",
-                      borderBottom:`1px solid ${T.b2}`,paddingBottom:6}}/>
-                </div>
-              ))}
-            </Card>
-          </div>
-        )}
-
-        {/* ══════════════ TARGET ══════════════ */}
-        {tab==="tgt"&&(
-          <div>
-            {/* Mode comparison table */}
-            <Card style={{marginBottom:12}}>
-              <SLabel>Bucket Targets by Mode (135% Total)</SLabel>
-              <div style={{overflowX:"auto"}}>
-                <table style={{width:"100%",borderCollapse:"collapse",fontSize:11}}>
-                  <thead>
-                    <tr>
-                      <th style={{textAlign:"left",padding:"6px 10px",color:T.t3,fontWeight:500,fontSize:9}}>Bucket</th>
-                      {["🟢 BULL","🟡 NEUTRAL","🟠 CAUTION","🔴 CRISIS"].map(m=>(
-                        <th key={m} style={{padding:"6px 10px",color:T.t3,fontWeight:500,fontSize:9,textAlign:"center"}}>{m}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.keys(BC).map(b=>(
-                      <tr key={b} className="row-hover">
-                        <td style={{padding:"9px 10px",fontWeight:600,color:BC[b]}}>{BE[b]} {b}</td>
-                        {["BULL","NEUTRAL","CAUTION","CRISIS"].map(m=>(
-                          <td key={m} style={{padding:"9px 10px",textAlign:"center",
-                            fontFamily:"'DM Mono',monospace",
-                            color:m===mode?MM[m].color:T.t2,
-                            fontWeight:m===mode?700:400,
-                            background:m===mode?`${MM[m].color}08`:"transparent",
-                          }}>{TARGET[m][b]}%</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </Card>
-
-            {/* Stock targets */}
-            {mode!=="UNKNOWN"&&(
-              <div>
-                <SLabel>Stock Targets · {mode} Mode</SLabel>
-                {Object.keys(BC).map(bucket=>(
-                  <div key={bucket} style={{marginBottom:14}}>
-                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                      <span style={{fontSize:14}}>{BE[bucket]}</span>
-                      <span style={{fontSize:13,fontWeight:600,color:BC[bucket]}}>{bucket}</span>
-                      <span style={{fontSize:11,color:BC[bucket],fontFamily:"'DM Mono',monospace"}}>{tgtM[bucket]}%</span>
-                    </div>
-                    <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-                      {Object.entries(BH[bucket]?.[mode]||{}).map(([t,p])=>(
-                        <div key={t} style={{background:T.bg2,border:`1px solid ${BC[bucket]}22`,borderRadius:8,padding:"5px 12px",fontSize:11}}>
-                          <span style={{fontWeight:600,fontFamily:"'DM Mono',monospace"}}>{t}</span>
-                          <span style={{color:BC[bucket],marginLeft:8,fontFamily:"'DM Mono',monospace"}}>{p}%</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Permanent */}
-            <Card style={{border:`1px solid rgba(251,191,36,.2)`}}>
-              <SLabel>Permanent Holdings</SLabel>
-              <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-                {Object.entries(PERM).map(([t,mn])=>(
-                  <div key={t} style={{background:T.bg2,border:`1px solid rgba(251,191,36,.2)`,borderRadius:8,padding:"5px 12px",fontSize:11}}>
-                    <span style={{fontWeight:600,color:"#fbbf24",fontFamily:"'DM Mono',monospace"}}>{t}</span>
-                    <span style={{color:T.t3,marginLeft:8}}>≥{mn}%</span>
-                  </div>
-                ))}
-                <div style={{background:T.bg2,border:"1px solid rgba(248,113,113,.2)",borderRadius:8,padding:"5px 12px",fontSize:11}}>
-                  <span style={{fontWeight:600,color:"#f87171",fontFamily:"'DM Mono',monospace"}}>CLOI</span>
-                  <span style={{color:T.t3,marginLeft:8}}>= 3% fixed</span>
-                </div>
-              </div>
-            </Card>
-          </div>
-        )}
-
-        {/* ══════════════ MACRO ══════════════ */}
-        {tab==="macro"&&(
-          <div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
-              {[
-                {label:"VIX",k:"vix",ph:"26.78",fn:sVIX,note:"Fear gauge — equity options volatility",
-                  zones:[{l:"<20",m:"BULL"},{l:"20–25",m:"NEUTRAL"},{l:"25–35",m:"CAUTION"},{l:">35",m:"CRISIS"}]},
-                {label:"WTI Oil ($)",k:"oil",ph:"98.32",fn:sOil,note:"Stagflation + war inflation indicator",
-                  zones:[{l:"<$85",m:"BULL"},{l:"$85–95",m:"NEUTRAL"},{l:"$95–115",m:"CAUTION"},{l:">$115",m:"CRISIS"}]},
-                {label:"MOVE Index",k:"move",ph:"85",fn:sMOVE,note:"Bond market vol — credit stress",
-                  zones:[{l:"<95",m:"BULL"},{l:"95–110",m:"NEUTRAL"},{l:"110–130",m:"CAUTION"},{l:">130",m:"CRISIS"}]},
-                {label:"SPX vs 200MA %",k:"spx200",ph:"-4.4",fn:sSPX,note:"% ที่ SPX เหนือ/ต่ำกว่า 200-day MA",
-                  zones:[{l:">+2%",m:"BULL"},{l:"-3 to +2%",m:"NEUTRAL"},{l:"-10 to -3%",m:"CAUTION"},{l:"<-10%",m:"CRISIS"}]},
-              ].map(f=>{
-                const raw=mac[f.k]??"";
-                const n=parseFloat(raw);
-                const sig=(!isNaN(n)&&raw.trim()!=="-"&&raw.trim()!=="")
-                  ?f.fn(n):null;
-                const c=sig?MM[sig].color:T.b2;
-                return(
-                  <Card key={f.k} style={{border:`1px solid ${sig?c+"33":T.b1}`}}>
-                    <div style={{fontSize:9,color:T.t3,letterSpacing:"1px",fontWeight:500,marginBottom:8}}>{f.label}</div>
-                    <input
-                      type="text" inputMode="text" value={raw}
-                      onChange={e=>{
-                        const v=e.target.value;
-                        if(v===""||v==="-"||/^-?\d*\.?\d*$/.test(v)){
-                          setMac(m=>({...m,[f.k]:v}));
-                        }
-                      }}
-                      placeholder={f.ph}
-                      style={{...IS,fontSize:26,fontWeight:700,color:sig?c:T.t3,fontFamily:"'DM Mono',monospace"}}/>
-                    {sig&&<div style={{display:"flex",alignItems:"center",gap:6,marginTop:8}}><ModeDot mode={sig}/><span style={{fontSize:11,fontWeight:600,color:c}}>{sig}</span></div>}
-                    <div style={{fontSize:10,color:T.t3,marginTop:8,marginBottom:10}}>{f.note}</div>
-                    {f.zones.map((z,i)=>(
-                      <div key={i} style={{display:"flex",alignItems:"center",gap:7,marginBottom:5}}>
-                        <ModeDot mode={z.m}/>
-                        <span style={{fontSize:10,color:sig===z.m?T.t1:T.t3,fontWeight:sig===z.m?600:400}}>{z.l}</span>
-                        {sig===z.m&&<span style={{fontSize:9,color:MM[z.m].color,marginLeft:"auto"}}>← ตอนนี้</span>}
-                      </div>
-                    ))}
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* Mode result */}
-            <Card style={{background:mm.bg,border:`1px solid ${mm.border}`,marginBottom:10}}>
-              <div style={{fontSize:9,color:T.t3,letterSpacing:"2px",fontWeight:500,marginBottom:6}}>FINAL MODE · WORST CASE</div>
-              <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:22,fontWeight:700,color:mm.color}}>{mm.label}</div>
-              <div style={{fontSize:11,color:T.t3,marginTop:4}}>{mm.desc}</div>
-              {Object.keys(sigs).length>0&&(
-                <div style={{display:"flex",gap:14,marginTop:12}}>
-                  {Object.entries(sigs).map(([k,s])=>(
-                    <div key={k} style={{textAlign:"center"}}>
-                      <div style={{fontSize:8,color:T.t3,marginBottom:4,fontFamily:"'DM Mono',monospace"}}>{k}</div>
-                      <Badge color={MM[s].color} bg={`${MM[s].color}18`}>{s}</Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <Card>
-                <SLabel>Transition Rules</SLabel>
-                <div style={{fontSize:11,color:T.t2,lineHeight:2.2}}>
-                  <div style={{fontSize:9,color:T.t3,fontWeight:600,letterSpacing:"1px",marginBottom:4}}>ขาลง (2 วันยืนยัน)</div>
-                  <div>🟢 → 🟡 VIX &gt; 20</div>
-                  <div>🟡 → 🟠 VIX &gt; 25</div>
-                  <div style={{color:"#f87171"}}>🟠 → 🔴 VIX &gt; 35 — <strong>ทันที</strong></div>
-                  <div style={{fontSize:9,color:T.t3,fontWeight:600,letterSpacing:"1px",marginTop:8,marginBottom:4}}>ขาขึ้น (3-5 วันยืนยัน)</div>
-                  <div>🔴 → 🟠 VIX &lt; 30</div>
-                  <div>🟠 → 🟡 VIX &lt; 22</div>
-                  <div>🟡 → 🟢 VIX &lt; 18</div>
-                </div>
-              </Card>
-              <Card style={{border:`1px solid rgba(248,113,113,.2)`}}>
-                <SLabel>Crisis Deploy Protocol</SLabel>
-                {[
-                  {v:"VIX 35", d:"40% SGOV", t:"LLY · NVDA · GOOGL · CRWD · GLDM"},
-                  {v:"VIX 45", d:"35% ที่เหลือ", t:"NVDA · AVGO · LLY · CEG · CRDO"},
-                  {v:"VIX 60", d:"25% ที่เหลือ", t:"NVDA · GOOGL · LLY · AVGO"},
-                ].map((r,i)=>(
-                  <div key={i} style={{marginBottom:10}}>
-                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:2}}>
-                      <span style={{color:"#f87171",fontWeight:700,fontSize:12,fontFamily:"'DM Mono',monospace"}}>{r.v}</span>
-                      <span style={{color:T.t3,fontSize:10}}>→ {r.d}</span>
-                    </div>
-                    <div style={{fontSize:10,color:T.t3,paddingLeft:4}}>{r.t}</div>
-                  </div>
-                ))}
-                <div style={{fontSize:10,color:"#f87171",paddingTop:8,borderTop:`1px solid ${T.b1}`}}>⚠ CLOI = Iron Floor — ห้าม deploy ทุกกรณี</div>
-              </Card>
-            </div>
-          </div>
-        )}
-
-      </div>
-    </div>
-  );
+function buildPie(bp,total){
+  const bk=Object.keys(BC),vals=bk.map(b=>Math.max(bp[b]||0,0)),sum=vals.reduce((a,v)=>a+v,0)||1;
+  const cx=130,cy=130,R=96,ri=58,G=0.028;let ang=3*Math.PI/4;
+  const sl=bk.map((b,i)=>{
+    const raw=vals[i]/sum,sw=Math.max(raw*2*Math.PI-G,0.001),a1=ang+G/2,a2=a1+sw;ang+=raw*2*Math.PI;
+    const mid=(a1+a2)/2,ox1=cx+R*Math.cos(a1),oy1=cy+R*Math.sin(a1),ox2=cx+R*Math.cos(a2),oy2=cy+R*Math.sin(a2);
+    const ix1=cx+ri*Math.cos(a2),iy1=cy+ri*Math.sin(a2),ix2=cx+ri*Math.cos(a1),iy2=cy+ri*Math.sin(a1),lg=sw>Math.PI?1:0;
+    const d=`M${ox1},${oy1} A${R},${R} 0 ${lg},1 ${ox2},${oy2} L${ix1},${iy1} A${ri},${ri} 0 ${lg},0 ${ix2},${iy2} Z`;
+    const r1=R+6,r2=R+16,r3=R+20,lx1=cx+r1*Math.cos(mid),ly1=cy+r1*Math.sin(mid),lx2=cx+r2*Math.cos(mid),ly2=cy+r2*Math.sin(mid),rt=Math.cos(mid)>0,lx3=cx+r3*Math.cos(mid)+(rt?4:-4),ly3=cy+r3*Math.sin(mid);
+    return{b,raw,d,lx1,ly1,lx2,ly2,lx3,ly3,rt,pct:bp[b]||0};
+  });
+  const sp=sl.map(s=>`<path d="${s.d}" fill="${PC[s.b]}" opacity="0.93"/>`).join('');
+  const lb=sl.filter(s=>s.raw>0.05).map(s=>`<line x1="${s.lx1}" y1="${s.ly1}" x2="${s.lx2}" y2="${s.ly2}" stroke="${PC[s.b]}" stroke-width="1.2" opacity="0.7"/><circle cx="${s.lx2}" cy="${s.ly2}" r="1.8" fill="${PC[s.b]}"/><text x="${s.lx3}" y="${s.ly3}" text-anchor="${s.rt?'start':'end'}" dominant-baseline="middle" font-size="9.5" font-weight="600" fill="${PC[s.b]}" font-family="DM Mono,monospace">${s.pct.toFixed(0)}%</text>`).join('');
+  const lg=sl.map(s=>`<div class="li"><div class="ld" style="background:${PC[s.b]};box-shadow:0 0 7px ${PC[s.b]}55"></div><span style="font-size:10px;color:#e8f0f8;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${BE[s.b]} ${s.b}</span><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:${PC[s.b]};flex-shrink:0">${s.pct.toFixed(1)}%</span></div>`).join('');
+  return`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;padding-bottom:10px;border-bottom:1px solid #1c2a3a"><span style="font-size:9px;font-weight:600;color:#4e6478;letter-spacing:2.5px;text-transform:uppercase">Allocation</span><span style="font-family:'DM Mono',monospace;color:#8aa0b4;font-size:10px">${(total/1000).toFixed(1)}K THB</span></div><div style="display:flex;justify-content:center;margin:4px 0 16px"><svg width="100%" viewBox="0 0 260 260" style="max-width:320px;overflow:visible"><circle cx="${cx}" cy="${cy}" r="${(R+ri)/2}" fill="none" stroke="#111820" stroke-width="${R-ri+2}"/>${sp}${lb}<circle cx="${cx}" cy="${cy}" r="${ri-1}" fill="#0d1117"/><text x="${cx}" y="${cy-11}" text-anchor="middle" font-size="18" fill="#e8f0f8" font-family="DM Mono,monospace" font-weight="500">${(total/1000).toFixed(0)}K</text><text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="9" fill="#4e6478">THB</text><text x="${cx}" y="${cy+22}" text-anchor="middle" font-size="7.5" fill="#4e6478" opacity="0.7">135% basis</text></svg></div><div class="lg">${lg}</div></div>`;
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+// PORTFOLIO
+function rPort(){
+  const{mode,tgt,usdthb,total,bv,bp,sp}=calc();const el=document.getElementById('t-port');
+  let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="font-size:10px;color:#4e6478">${S.lr?`<span style="color:#10d9a0">ราคา: ${S.lr}</span>`:`ยังไม่มีราคา · <span style="color:#38bdf8;cursor:pointer;text-decoration:underline" onclick="goTab('prices')">ไป Prices →</span>`}</div>
+    <button onclick="clrSh()" style="background:#111820;border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:8px;padding:5px 12px;font-size:11px">Clear</button>
+  </div>
+  <div style="font-size:10px;color:#4e6478;margin-bottom:12px;padding:7px 12px;background:#111820;border-radius:8px">💡 กด card เพื่อกรอก shares · มูลค่า = shares × price × ${usdthb} THB/USD</div>`;
+  Object.keys(BC).forEach(b=>{
+    const bpct=bp[b]||0,btgt=tgt[b]||0,bgap=bpct-btgt,gc=Math.abs(bgap)<=3?'#10d9a0':bgap>0?'#f97316':'#60a5fa';
+    const tks=ALL.filter(t=>BM[t]===b);
+    h+=`<div style="margin-bottom:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid ${BC[b]}22">
+      <span style="font-size:15px">${BE[b]}</span><span style="font-size:13px;font-weight:600;color:${BC[b]}">${b}</span>
+      <span style="font-size:10px;color:#4e6478;font-family:'DM Mono',monospace">${total>0?bpct.toFixed(1):'—'}% / ${btgt}%</span>
+      ${total>0?`<span class="badge" style="color:${gc};background:${gc}18">${bgap>0?'+':''}${bgap.toFixed(1)}%</span>`:''}
+      ${bv[b]>0?`<span style="margin-left:auto;font-size:10px;color:#4e6478;font-family:'DM Mono',monospace">${bv[b].toLocaleString()}</span>`:''}
+    </div><div class="sg">`;
+    tks.forEach(ticker=>{
+      const tp=BH[b]?.[mode]?.[ticker]??0,cp=sp[ticker]||0,g2=cp-tp,gc2=Math.abs(g2)<=1?'#10d9a0':g2>0?'#f97316':'#60a5fa';
+      const sh=parseFloat(S.sh[ticker])||0,pr=parseFloat(S.pr[ticker])||0,thb=sh>0&&pr>0?Math.round(sh*pr*usdthb):0,has=thb>0;
+      h+=`<div class="sc" style="background:${has?'#111820':'#0d1117'};border-color:${has?BC[b]+'44':'#1c2a3a'}" onclick="openModal('${ticker}')">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;font-weight:600;color:${has?BC[b]:'#4e6478'};font-family:'DM Mono',monospace">${ticker}</span>
+          ${total>0&&tp>0&&has?`<span class="badge" style="color:${gc2};background:${gc2}15">${g2>0?'+':''}${g2.toFixed(1)}%</span>`:''}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div><div style="font-size:11px;color:${pr>0?'#38bdf8':'#4e6478'};font-family:'DM Mono',monospace">${pr>0?'$'+pr:'—'}</div>
+          <div style="font-size:9px;color:${sh>0?'#10d9a0':'#4e6478'};font-family:'DM Mono',monospace;margin-top:2px">${sh>0?sh+' sh':'tap +'}</div></div>
+          <div style="text-align:right">${has?`<div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:#a5f3fc;letter-spacing:-.5px">${thb.toLocaleString()}</div><div style="font-size:8px;color:#4e6478;margin-top:1px">tgt ${tp}%</div>`:`<div style="font-size:9px;color:#4e6478">tgt ${tp}%</div>`}</div>
+        </div>
+      </div>`;
+    });
+    h+='</div></div>';
+  });
+  el.innerHTML=h;
+}
+function clrSh(){if(!confirm('ล้าง shares?'))return;ALL.forEach(t=>S.sh[t]='');localStorage.removeItem(K.sh);rPort();}
+
+// PRICES
+function rPrices(){
+  const el=document.getElementById('t-prices');
+  let h=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+    <div><div style="font-size:13px;font-weight:600;margin-bottom:3px">ราคาหุ้น</div>
+    <div style="font-size:10px;color:#4e6478">${S.lr?`อัปเดต <span style="color:#10d9a0">${S.lr}</span>`:'ยังไม่มีราคา'}</div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px"><span class="sl">Paste JSON จากฟิน</span>
+    <textarea id="pa" rows="3" placeholder='{"NVDA":172.7,"GOOGL":307.1,...}' style="width:100%;background:#111820;border:1px solid #1c2a3a;border-radius:8px;color:#e8f0f8;padding:10px 12px;line-height:1.6;box-sizing:border-box"></textarea>
+    <div id="ps" style="margin-top:8px;font-size:11px;display:none"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button onclick="doParse()" style="flex:1;background:#38bdf8;border:none;color:#07090e;border-radius:8px;padding:9px;font-size:12px;font-weight:600">Parse & Update</button>
+      <button onclick="document.getElementById('pa').value='';document.getElementById('ps').style.display='none'" style="background:#111820;border:1px solid #1c2a3a;color:#4e6478;border-radius:8px;padding:9px 16px;font-size:12px">Clear</button>
+    </div>
+  </div>`;
+  Object.keys(BC).forEach(b=>{
+    const tks=ALL.filter(t=>BM[t]===b);
+    h+=`<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:${BC[b]};margin-bottom:5px">${BE[b]} ${b}</div>
+    <div style="background:#0d1117;border:1px solid #1c2a3a;border-radius:12px;overflow:hidden">`;
+    tks.forEach((ticker,i)=>{
+      const pr=parseFloat(S.pr[ticker]);
+      h+=`<div class="pr" ${i===tks.length-1?'style="border-bottom:none"':''}><span style="font-size:13px;font-weight:500;color:${pr>0?'#e8f0f8':'#4e6478'};min-width:80px;font-family:'DM Mono',monospace">${ticker}</span>
+        <div style="display:flex;align-items:center;gap:4px"><span style="font-size:11px;color:#4e6478">$</span>
+        <input type="text" inputmode="decimal" value="${S.pr[ticker]||''}" placeholder="—"
+          style="font-size:13px;font-weight:500;color:${pr>0?'#38bdf8':'#4e6478'};text-align:right;width:90px"
+          oninput="upPr('${ticker}',this.value)"></div></div>`;
+    });
+    h+='</div></div>';
+  });
+  el.innerHTML=h;
+}
+function upPr(t,v){if(v===''||/^\d*\.?\d*$/.test(v)){S.pr[t]=v;autoSave();}}
+function doParse(){
+  const raw=document.getElementById('pa').value.trim();
+  if(!raw){spSt('⚠ วางข้อความก่อน','#f97316');return;}
+  let cl=raw.replace(/```[a-z]*/gi,'').replace(/```/g,'').replace(/`/g,'').trim();
+  let found=0;
+  function ak(k,val){let key=k.toUpperCase().trim();if(key==='BRKB')key='BRK-B';if(S.pr[key]!==undefined&&val>0){S.pr[key]=String(val);found++;return true;}return false;}
+  try{const j=JSON.parse(cl);Object.keys(j).forEach(k=>ak(k,parseFloat(j[k])));}
+  catch{[...cl.matchAll(/"?([A-Z][A-Z0-9\-+]{1,9})"?\s*[:\s,]+\s*\$?([0-9]+\.?[0-9]*)/g)].forEach(x=>ak(x[1],parseFloat(x[2])));}
+  if(!found){spSt('⚠ ไม่พบราคา','#f97316');return;}
+  const now=new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+  S.lr=now;autoSave();spSt('✓ อัปเดต '+found+' ตัว · '+now,'#10d9a0');
+  document.getElementById('pa').value='';setTimeout(()=>rPrices(),100);
+}
+function spSt(m,c){const e=document.getElementById('ps');if(!e)return;e.textContent=m;e.style.color=c;e.style.display='block';if(c==='#10d9a0')setTimeout(()=>{e.style.display='none';},5000);}
+
+// ACTION
+function rAct(){
+  const{mode,tgt,total,bp,sp}=calc();const el=document.getElementById('t-act');
+  const bgt=parseFloat(S.fx.budget)||0;
+  let h=`<div class="card" style="margin-bottom:12px"><span class="sl">งบลงทุน</span>
+    <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:#4e6478">฿</span>
+    <input type="text" inputmode="decimal" value="${S.fx.budget}" placeholder="20000" style="font-size:18px;font-weight:600"
+      oninput="S.fx.budget=this.value;autoSave();rAct()"></div></div>`;
+  if(!bgt||total===0){h+=`<div style="text-align:center;padding:40px 20px;color:#4e6478;font-size:13px">${total===0?'กรอกข้อมูล Portfolio ก่อน':'ใส่งบลงทุน'}</div>`;el.innerHTML=h;return;}
+  const pri=AP[mode]||AP.NEUTRAL,acts=[];let rem=bgt;
+  for(const b of pri){
+    if(rem<=0)break;const gap=(tgt[b]||0)-(bp[b]||0);if(gap<=1)continue;const need=(gap/135)*total;
+    const stks=ALL.filter(t=>BM[t]===b).map(t=>({t,gap:(BH[b]?.[mode]?.[t]??0)-(sp[t]||0),t2:BH[b]?.[mode]?.[t]??0})).filter(s=>s.gap>0.5).sort((a,b)=>b.gap-a.gap);
+    for(const s of stks){if(rem<=0)break;const amt=Math.min((s.gap/135)*total,rem,need);if(amt>200){acts.push({ticker:s.t,b,amount:Math.round(amt/100)*100,gap:s.gap,t2:s.t2});rem-=amt;}}
+  }
+  if(!acts.length){h+=`<div style="text-align:center;padding:40px 20px;color:#10d9a0;font-size:13px">✓ พอร์ต Balanced แล้ว</div>`;}
+  else acts.forEach(a=>{h+=`<div style="background:#0d1117;border:1px solid ${BC[a.b]}33;border-radius:12px;padding:12px 16px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:700;color:${BC[a.b]};font-family:'DM Mono',monospace">${a.ticker}</span><span class="badge" style="color:${BC[a.b]};background:${BC[a.b]}15">${a.b}</span></div><span style="font-size:15px;font-weight:600;color:#10d9a0;font-family:'DM Mono',monospace">฿${a.amount.toLocaleString()}</span></div><div style="font-size:10px;color:#4e6478;margin-top:6px">gap ${a.gap.toFixed(1)}% · tgt ${a.t2}%</div></div>`;});
+  el.innerHTML=h;
+}
+
+// NET WORTH
+function rNW(){
+  const{total,usdthb}=calc();const el=document.getElementById('t-nw');
+  const savTot=(parseFloat(S.sav.iau)||0)+(parseFloat(S.sav.kgc)||0)+(parseFloat(S.sav.usdDep)||0)*usdthb,nw=total+savTot;
+  let h=`<div class="card" style="margin-bottom:12px"><span class="sl">USDTHB Rate</span>
+    <input type="text" inputmode="decimal" value="${S.fx.usdthb}" style="font-size:22px;font-weight:600" oninput="S.fx.usdthb=this.value;autoSave();renderAll()">
+  </div>
+  <div class="card" style="margin-bottom:12px"><span class="sl">Gold Saving (THB)</span>
+    ${[['IAU (Gold ETF)','iau'],['KGC (Gold Miner)','kgc'],['USD Deposit','usdDep']].map(([l,k])=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span style="font-size:11px;color:#8aa0b4">${l}</span><input type="text" inputmode="decimal" value="${S.sav[k]}" placeholder="0" style="font-size:14px;font-weight:600;text-align:right;width:120px" oninput="S.sav['${k}']=this.value;autoSave();rNW()"></div>`).join('')}
+  </div>`;
+  if(nw>0)h+=`<div class="card"><span class="sl">Net Worth</span>${[['Portfolio',total],['Gold Saving',savTot],['Total',nw]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;${l!=='Total'?'padding-bottom:12px;border-bottom:1px solid #1c2a3a':''}"><span style="font-size:12px;color:#8aa0b4">${l}</span><span style="font-family:'DM Mono',monospace;font-size:${l==='Total'?18:14}px;font-weight:${l==='Total'?700:500};color:${l==='Total'?'#38bdf8':'#e8f0f8'}">${(v/1000).toFixed(1)}K THB</span></div>`).join('')}</div>`;
+  el.innerHTML=h;
+}
+
+// TARGET
+function rTgt(){
+  const el=document.getElementById('t-tgt');
+  el.innerHTML=['BULL','NEUTRAL','CAUTION','CRISIS'].map(m=>`<div class="card"><span class="sl">${MM[m].label} · Target</span><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px">${Object.entries(TGT[m]).map(([b,p])=>`<div style="background:#111820;border-radius:8px;padding:8px 10px;border:1px solid ${BC[b]}33"><div style="font-size:9px;color:${BC[b]};margin-bottom:4px">${BE[b]} ${b}</div><div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600">${p}%</div></div>`).join('')}</div></div>`).join('');
+}
+
+// MACRO
+function rMacro(){
+  const el=document.getElementById('t-macro');
+  el.innerHTML=`<div class="card" style="margin-bottom:12px"><span class="sl">Macro Inputs</span>${[['VIX','vix','22'],['Oil $','oil','98'],['MOVE','move','85'],['SPX vs 200MA %','spx200','-4.4']].map(([l,k,ph])=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span style="font-size:12px;color:#8aa0b4;min-width:130px">${l}</span><input type="text" inputmode="text" value="${S.mac[k]}" placeholder="${ph}" style="font-size:16px;font-weight:600;text-align:right;width:100px" oninput="S.mac['${k}']=this.value;autoSave();renderAll()"></div>`).join('')}</div>
+  <div class="card"><span class="sl">Mode Thresholds</span>${[['🟢 BULL','VIX<20 · Oil<$85 · MOVE<95 · SPX>2%'],['🟡 NEUTRAL','VIX 20-25 · Oil $85-95'],['🟠 CAUTION','VIX 25-35 · Oil $95-115'],['🔴 CRISIS','VIX>35 · Oil>$115']].map(([m,d])=>`<div style="margin-bottom:10px"><div style="font-size:12px;font-weight:600;margin-bottom:2px">${m}</div><div style="font-size:10px;color:#4e6478">${d}</div></div>`).join('')}</div>`;
+}
+
+// MODAL
+function openModal(ticker){
+  mTicker=ticker;
+  document.getElementById('mt').textContent=ticker;document.getElementById('mt').style.color=BC[BM[ticker]]||'#38bdf8';
+  document.getElementById('mb').textContent=BM[ticker]||'';
+  const pr=parseFloat(S.pr[ticker])||0,usdthb=parseFloat(S.fx.usdthb)||33.5;
+  document.getElementById('mc').innerHTML=pr>0?`<span style="color:#38bdf8">$${S.pr[ticker]}</span>`:'';
+  const inp=document.getElementById('os');inp.value=S.sh[ticker]||'';
+  document.getElementById('ov').classList.add('on');setTimeout(()=>inp.focus(),100);updMC();
+}
+function updMC(){
+  if(!mTicker)return;const pr=parseFloat(S.pr[mTicker])||0,sh=parseFloat(document.getElementById('os').value)||0,u=parseFloat(S.fx.usdthb)||33.5;
+  document.getElementById('mc').innerHTML=pr>0?`<span style="color:#38bdf8">$${S.pr[mTicker]}</span>`+(sh>0?`<span style="color:#10d9a0;margin-left:8px">→ ${Math.round(sh*pr*u).toLocaleString()} THB</span>`:''):'';
+}
+function mkd(e){if(e.key==='Enter')saveModal();if(e.key==='Escape')closeModal();}
+function saveModal(){if(!mTicker)return;S.sh[mTicker]=document.getElementById('os').value;autoSave();closeModal();if(ctab==='port')rPort();}
+function closeModal(){document.getElementById('ov').classList.remove('on');mTicker=null;}
+
+// START
+loadAll();renderAll();
 </script>
 </body>
 </html>
